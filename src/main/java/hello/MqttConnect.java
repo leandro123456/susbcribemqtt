@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttConnect implements MqttCallback{
 	private static MqttConnect mqttconnect= null;
-	private static MqttClient client;
+	private MqttClient client;
 	
 	private MqttConnect(){
 		this.iniciar();
@@ -19,6 +19,7 @@ public class MqttConnect implements MqttCallback{
 	
 	public static MqttConnect getInstance(){
 		if(mqttconnect==null){
+			System.out.println("mqttconnect es null");
 			mqttconnect=new MqttConnect();
 		}
 		return mqttconnect;
@@ -26,64 +27,29 @@ public class MqttConnect implements MqttCallback{
 	
 	public void iniciar(){
 		String publisherId = UUID.randomUUID().toString();
+		System.out.println("ejecutar el inicio");
 		try {
-			MqttClient publisher = new MqttClient("ws://"+"mqtt.coiaca.com"+":"+"8080","casa",new MemoryPersistence());
+			MqttClient publisher = new MqttClient("ws://"+"mqtt.coiaca.com"+":"+"8080",publisherId,new MemoryPersistence());
 			publisher.setCallback(this);
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(true);
 			options.setCleanSession(false);
-			options.setConnectionTimeout(5);
+			options.setConnectionTimeout(35);
 			options.setUserName("mqttusr");
 			options.setPassword("mqttpwd".toCharArray());
-			publisher.connect(options);
-		
 			if ( !publisher.isConnected()) {
-	           	System.out.println("fallo la conexion");
+	           	System.out.println("no esta conectado");
+	           	publisher.connect(options);
 	           	this.client =publisher;
 	        }else {
 	        	System.out.println("conecto a :" + publisher);
-	        	this.client =null;
+	        	this.client =publisher;
 	        }
-
-			
-			
-//			esto lo comente
-//			CountDownLatch receivedSignal = new CountDownLatch(10);
-//			try {
-//				System.in.read();
-//				System.out.println("obtuvo");
-//			} catch (IOException e) {
-//				System.out.println("fallo");
-//			}
-			
-			
-			
-			
-//			receivedSignal.await(1, TimeUnit.MINUTES);
-			
-//			publisher.subscribe("RMgmt/debug");
-//			CountDownLatch receivedSignal = new CountDownLatch(10);
-//			publisher.subscribe("RMgmt/debug"
-//					, (topic, msg) -> {
-//			    byte[] payload = msg.getPayload();
-//			    // ... payload handling omitted
-//			    receivedSignal.countDown();
-//			}
-//					);    
-//			 System.out.println(String.format("[%s] %s", topic, new String(message.getPayload())));
-//			receivedSignal.await(1, TimeUnit.MINUTES);
-			
-			
-//	        MqttMessage msg = makemqttmessage(message);
-//	      //  msg.setQos(0);
-//	      //  msg.setRetained(true);
-//	        publisher.publish(topic,msg); 
 				
 		} catch (Exception e) {
 			System.out.println("mensaje: "+ e.getMessage());
 			e.printStackTrace();
 		}
-		this.client =null;
 	}
 	
 	@Override
@@ -109,7 +75,7 @@ public class MqttConnect implements MqttCallback{
 	}
 	
 	public void setClient(MqttClient client) {
-		MqttConnect.client = client;
+		this.client = client;
 	}
    
    

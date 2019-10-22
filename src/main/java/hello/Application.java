@@ -18,11 +18,36 @@ public class Application {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             System.out.println("INICIO");
-        	//MqttClient client = MqttConnect.getInstance().getClient();
+            
+//            inicio  del mio
+        	MqttClient client = MqttConnect.getInstance().getClient();
         	System.out.println("Esta conectada loro");
 			int qos = 0;
-			MqttConnect.getInstance().getClient().subscribe("DSC010000000002/#", qos);
+			//if(MqttConnect.getInstance()!= null)
+			if(client !=null) {
+				client.subscribe("DSC010000000001/#", qos);
+				client.subscribe("DSC010000000002/#", qos);
+				client.subscribe("DSC010000000001/#", qos);
+				client.subscribe("PSWS10000000001/#", qos);
+				client.subscribe("PSWS20000000001/#", qos);
+				client.subscribe("PS3S1P120190323/#", qos);
+				client.subscribe("WTHUSB000000002/#", qos);
+				client.subscribe("RMgmt/#", qos);
+				
+			}
+			else
+				System.out.println("el cliente es NULO");
+		//	else
+			//	MqttConnect.getInstance();
 			System.out.println("Me suscribi");
+			
+			client = MqttConnect.getInstance().getClient();
+			System.out.println("es nukk: "+ client);
+			
+            
+            //agregue proyecto moquette
+            
+            
         };
     }
 

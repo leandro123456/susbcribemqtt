@@ -24,14 +24,13 @@ public class EnviodeMensajes implements Callable<Void>{
     public Void call() throws Exception {
         if ( !client.isConnected()) {
             System.out.println("Client no connectado.");
+            client.connect();
             return null;
-        }  
-        String json= valor;//ArmarMensajeAlarma("alarm-armarzona","1");
-	   	//System.out.println("el json: "+json);
+        }
+        String json= valor;
         MqttMessage msg = makemqttmessageString(json);
         msg.setQos(0);
         client.publish(topic,msg);        
-        
         return null;        
     }
     

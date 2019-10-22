@@ -6,6 +6,8 @@ import Persistence.DAO.DeviceDAO;
 import Persistence.Model.Device;
 import Persistence.Model.DeviceConfiguration;
 
+import java.util.UUID;
+
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -28,39 +30,35 @@ public class HelloController {
     		else
     			devconf= device.getDeviceconfiguration().get(1);
     		
-    		MqttClient cliente = MqttConnect.getInstance().getClient();
-    		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
-			env.call();
+//    		MqttClient cliente = MqttConnect.getInstance().getClient();
+//    		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
+//			env.call();
     		
 			
 			//esto se comento
-//    		IMqttClient publisher = new MqttClient("ws://"+devconf.getIphostescuchar()+":"+devconf.getPortescuchar(),"casa",new MemoryPersistence());
-//			MqttConnectOptions options = new MqttConnectOptions();
-//			options.setAutomaticReconnect(true);
-//			//options.setCleanSession(false);
-//			options.setConnectionTimeout(5);
-//			options.setUserName(devconf.getUserescuchar());
-//			options.setPassword(devconf.getPassescuchar().toCharArray());
-//        	System.out.println("antes de conectar");
-//			publisher.connect(options);
-//			System.out.println("despues de conectar");
-//			if (publisher.isConnected()) {
-//	           	System.out.println("ESTABA conectada");
-//	    		EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
-//				env.call();
-//	        }else {
-//	        	System.out.println("NO ESTABA CONECTADA!!");
-//
-//	        	EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
-//				env.call();
-//	        }
-			
-			
-			
+    		String publisherId = UUID.randomUUID().toString();
+    		IMqttClient publisher = new MqttClient("ws://"+devconf.getIphostescuchar()+":"+devconf.getPortescuchar(),publisherId);
+			MqttConnectOptions options = new MqttConnectOptions();
+			options.setAutomaticReconnect(true);
+			//options.setCleanSession(false);
+			options.setConnectionTimeout(5);
+			options.setUserName(devconf.getUserescuchar());
+			options.setPassword(devconf.getPassescuchar().toCharArray());
+        	System.out.println("antes de conectar");
+			publisher.connect(options);
+			System.out.println("despues de conectar");
+			if (publisher.isConnected()) {
+	    		EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
+				env.call();
+	        }else {
+	        	EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
+	        	env.call();
+	        }
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "fallo_envio";
 		}
-        return "Se envio con exito";
+        return "envio_exitoso";
     }
     
 }
