@@ -29,14 +29,14 @@ public class MqttConnect implements MqttCallback{
 		String publisherId = UUID.randomUUID().toString();
 		System.out.println("ejecutar el inicio");
 		try {
-			MqttClient publisher = new MqttClient("ws://"+"mqtt.coiaca.com"+":"+"8080",publisherId,new MemoryPersistence());
+			MqttClient publisher = new MqttClient("tcp://"+"mqtt.coiaca.com"+":"+"1883",publisherId,new MemoryPersistence());
 			publisher.setCallback(this);
 			MqttConnectOptions options = new MqttConnectOptions();
-			options.setAutomaticReconnect(true);
-			options.setCleanSession(false);
-			options.setConnectionTimeout(35);
-			options.setUserName("mqttusr");
-			options.setPassword("mqttpwd".toCharArray());
+			options.setAutomaticReconnect(false);
+			//options.setCleanSession(false);
+			//options.setConnectionTimeout(35);
+			options.setUserName("cDashSVR");
+			options.setPassword("av1vEDacfGwXc5".toCharArray());
 			if ( !publisher.isConnected()) {
 	           	System.out.println("no esta conectado");
 	           	publisher.connect(options);

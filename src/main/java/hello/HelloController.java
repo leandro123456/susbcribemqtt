@@ -37,11 +37,11 @@ public class HelloController {
 			
 			//esto se comento
     		String publisherId = UUID.randomUUID().toString();
-    		IMqttClient publisher = new MqttClient("ws://"+devconf.getIphostescuchar()+":"+devconf.getPortescuchar(),publisherId);
+    		IMqttClient publisher = new MqttClient("tcp://"+devconf.getIphostescuchar()+":"+"1883",publisherId);
 			MqttConnectOptions options = new MqttConnectOptions();
-			options.setAutomaticReconnect(true);
+			options.setAutomaticReconnect(false);
 			//options.setCleanSession(false);
-			options.setConnectionTimeout(5);
+			//options.setConnectionTimeout(5);
 			options.setUserName(devconf.getUserescuchar());
 			options.setPassword(devconf.getPassescuchar().toCharArray());
         	System.out.println("antes de conectar");

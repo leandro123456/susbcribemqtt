@@ -43,6 +43,7 @@ public class Application {
 			
 			client = MqttConnect.getInstance().getClient();
 			System.out.println("es nukk: "+ client);
+			System.out.println("esta conectada: "+ client.isConnected());
 			
             
             //agregue proyecto moquette
