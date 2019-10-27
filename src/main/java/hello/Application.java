@@ -1,11 +1,15 @@
 package hello;
 
+import java.util.List;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+
+import Persistence.Model.Device;
 
 @SpringBootApplication
 public class Application {
@@ -25,13 +29,10 @@ public class Application {
 			int qos = 0;
 			//if(MqttConnect.getInstance()!= null)
 			if(client !=null) {
-				client.subscribe("DSC010000000001/#", qos);
-				client.subscribe("DSC010000000002/#", qos);
-				client.subscribe("DSC010000000001/#", qos);
-				client.subscribe("PSWS10000000001/#", qos);
-				client.subscribe("PSWS20000000001/#", qos);
-				client.subscribe("PS3S1P120190323/#", qos);
-				client.subscribe("WTHUSB000000002/#", qos);
+				List<String> topicos= Device.obtenerClientesCoiaca();
+				for(String topico : topicos) {
+					client.subscribe(topico, qos);
+				}
 				client.subscribe("RMgmt/#", qos);
 				
 			}

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import Persistence.DAO.DeviceDAO;
 import Persistence.Mongo.MongoDBObject;
 
 
@@ -212,6 +213,20 @@ public class Device extends MongoDBObject{
 
 	public void setMayorZonaInformada(Integer mayorZonaInformada) {
 		this.mayorZonaInformada = mayorZonaInformada;
+	}
+
+	public static List<String> obtenerClientesCoiaca() {
+		DeviceDAO devdao= new DeviceDAO();
+		List<String> result = new ArrayList<String>();
+		List<Device> devices = devdao.retrieveAllDevices();
+		DeviceConfiguration config = null;
+		for(Device dev: devices) {
+			if(dev.getUsedefaultbrocker()) {
+				String topico = dev.getDeviceconfiguration().get(0).getTopicescuchar();
+				result.add(topico);		
+			}
+		}
+		return result;
 	}
 	
 
