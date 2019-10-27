@@ -19,7 +19,7 @@ public class MqttConnect implements MqttCallback{
 	
 	public static MqttConnect getInstance(){
 		if(mqttconnect==null){
-			System.out.println("mqttconnect es null");
+			System.out.println("******************* mqttconnect es null");
 			mqttconnect=new MqttConnect();
 		}
 		return mqttconnect;
@@ -29,7 +29,7 @@ public class MqttConnect implements MqttCallback{
 		String publisherId = UUID.randomUUID().toString();
 		System.out.println("ejecutar el inicio");
 		try {
-			MqttClient publisher = new MqttClient("tcp://"+"mqtt.coiaca.com"+":"+"1883",publisherId,new MemoryPersistence());
+			MqttClient publisher = new MqttClient("tcp://"+"mqtt.coiaca.com"+":"+"1883","casa",new MemoryPersistence());
 			publisher.setCallback(this);
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(false);
@@ -38,16 +38,16 @@ public class MqttConnect implements MqttCallback{
 			options.setUserName("cDashSVR");
 			options.setPassword("av1vEDacfGwXc5".toCharArray());
 			if ( !publisher.isConnected()) {
-	           	System.out.println("no esta conectado");
+	           	System.out.println("************************no esta conectado");
 	           	publisher.connect(options);
 	           	this.client =publisher;
 	        }else {
-	        	System.out.println("conecto a :" + publisher);
+	        	System.out.println("************************conecto a :" + publisher);
 	        	this.client =publisher;
 	        }
 				
 		} catch (Exception e) {
-			System.out.println("mensaje: "+ e.getMessage());
+			System.out.println("*******************mensaje: "+ e.getMessage());
 			e.printStackTrace();
 		}
 	}

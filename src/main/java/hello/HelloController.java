@@ -30,30 +30,31 @@ public class HelloController {
     		else
     			devconf= device.getDeviceconfiguration().get(1);
     		
-//    		MqttClient cliente = MqttConnect.getInstance().getClient();
-//    		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
-//			env.call();
+    		MqttClient cliente = MqttConnect.getInstance().getClient();
+    		System.out.println("*************************ESTA CONECTADA???????? "+cliente.isConnected());
+    		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
+			env.call();
     		
 			
-			//esto se comento
-    		String publisherId = UUID.randomUUID().toString();
-    		IMqttClient publisher = new MqttClient("tcp://"+devconf.getIphostescuchar()+":"+"1883",publisherId);
-			MqttConnectOptions options = new MqttConnectOptions();
-			options.setAutomaticReconnect(false);
-			//options.setCleanSession(false);
-			//options.setConnectionTimeout(5);
-			options.setUserName(devconf.getUserescuchar());
-			options.setPassword(devconf.getPassescuchar().toCharArray());
-        	System.out.println("antes de conectar");
-			publisher.connect(options);
-			System.out.println("despues de conectar");
-			if (publisher.isConnected()) {
-	    		EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
-				env.call();
-	        }else {
-	        	EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
-	        	env.call();
-	        }
+//			esto se comento
+//    		String publisherId = UUID.randomUUID().toString();
+//    		IMqttClient publisher = new MqttClient("tcp://"+devconf.getIphostescuchar()+":"+"1883",publisherId);
+//			MqttConnectOptions options = new MqttConnectOptions();
+//			options.setAutomaticReconnect(false);
+//			//options.setCleanSession(false);
+//			//options.setConnectionTimeout(5);
+//			options.setUserName(devconf.getUserescuchar());
+//			options.setPassword(devconf.getPassescuchar().toCharArray());
+//        	System.out.println("antes de conectar");
+//			publisher.connect(options);
+//			System.out.println("despues de conectar");
+//			if (publisher.isConnected()) {
+//	    		EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
+//				env.call();
+//	        }else {
+//	        	EnviodeMensajes env = new EnviodeMensajes(publisher, valor,devconf.getTopicescribir());
+//	        	env.call();
+//	        }
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "fallo_envio";
