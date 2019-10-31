@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 import Persistence.DAO.DeviceDAO;
 import Persistence.Mongo.MongoDBObject;
 
@@ -30,7 +28,7 @@ public class Device extends MongoDBObject{
 	private String role;
 	private String timerString;
 	private DeviceNotification lastnotification;
-	private Integer particiones;
+	private Map<String,String> particiones;
 	private Integer mayorZonaInformada;
 	private List<DeviceAlarm> alarms;
 	private Boolean usedefaultbrocker;
@@ -38,6 +36,9 @@ public class Device extends MongoDBObject{
 	private Map<String,String> vista;
 	private List<String> users;
 	private List<String> admins;
+	private String status;
+	private Map<String,String> zonasObtenidas;
+	private String particionactiva;
 
 	
 	public Device() {
@@ -113,6 +114,14 @@ public class Device extends MongoDBObject{
 		this.delete = delete;
 	}
 
+	public String getParticionactiva() {
+		return particionactiva;
+	}
+
+	public void setParticionactiva(String particionactiva) {
+		this.particionactiva = particionactiva;
+	}
+
 	public String getRole() {
 		return role;
 	}
@@ -127,6 +136,14 @@ public class Device extends MongoDBObject{
 
 	public void setSerialnumber(String serialnumber) {
 		this.serialnumber = serialnumber;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getDescription() {
@@ -199,11 +216,21 @@ public class Device extends MongoDBObject{
 			return "fallo";
 	}
 
-	public Integer getParticiones() {
+
+
+	public Map<String, String> getZonasObtenidas() {
+		return zonasObtenidas;
+	}
+
+	public void setZonasObtenidas(Map<String, String> zonasObtenidas) {
+		this.zonasObtenidas = zonasObtenidas;
+	}
+
+	public Map<String, String> getParticiones() {
 		return particiones;
 	}
 
-	public void setParticiones(Integer particiones) {
+	public void setParticiones(Map<String, String> particiones) {
 		this.particiones = particiones;
 	}
 

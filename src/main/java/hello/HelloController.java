@@ -32,6 +32,13 @@ public class HelloController {
     		
     		MqttClient cliente = MqttConnect.getInstance().getClient();
     		System.out.println("*************************ESTA CONECTADA???????? "+cliente.isConnected());
+    		if(!cliente.isConnected()){
+    			MqttConnectOptions options = new MqttConnectOptions();
+    			options.setAutomaticReconnect(true);
+    			options.setUserName("cDashSVR");
+    			options.setPassword("av1vEDacfGwXc5".toCharArray());
+    			cliente.connect(options);
+    		}
     		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
 			env.call();
     		

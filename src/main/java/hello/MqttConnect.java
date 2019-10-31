@@ -1,5 +1,6 @@
 package hello;
 
+import java.util.Date;
 import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -9,9 +10,12 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import mqttContexto.DevicesCoiaca;
+
 public class MqttConnect implements MqttCallback{
 	private static MqttConnect mqttconnect= null;
 	private MqttClient client;
+	private DevicesCoiaca devcoiaca= new DevicesCoiaca();
 	
 	private MqttConnect(){
 		this.iniciar();
@@ -29,10 +33,10 @@ public class MqttConnect implements MqttCallback{
 		String publisherId = UUID.randomUUID().toString();
 		System.out.println("ejecutar el inicio");
 		try {
-			MqttClient publisher = new MqttClient("tcp://"+"mqtt.coiaca.com"+":"+"1883","casa",new MemoryPersistence());
+			MqttClient publisher = new MqttClient("tcp://"+"mqtt.coiaca.com"+":"+"1883",publisherId,new MemoryPersistence());
 			publisher.setCallback(this);
 			MqttConnectOptions options = new MqttConnectOptions();
-			options.setAutomaticReconnect(false);
+			options.setAutomaticReconnect(true);
 			//options.setCleanSession(false);
 			//options.setConnectionTimeout(35);
 			options.setUserName("cDashSVR");
@@ -54,7 +58,9 @@ public class MqttConnect implements MqttCallback{
 	
 	@Override
 	public void connectionLost(Throwable arg0) {
-		// TODO Auto-generated method stub
+		System.out.println("ERORR ++++++++++++++++++++++++++++");
+		Date fecha = new Date();
+		System.out.println("ERROR  SE PERDIO LA CONECCION: "+ fecha.toString());
 		
 	}
 
@@ -66,8 +72,9 @@ public class MqttConnect implements MqttCallback{
 
    @Override
    public void messageArrived(String topic, MqttMessage message) throws Exception {
-       System.out.println("Topico: "+topic);    
-   	System.out.println("message is : "+message);
+	   System.out.println("Topico: "+topic);    
+	   System.out.println("message is : "+message);
+	   devcoiaca.AnalizarMensajeCoiaca(topic, message);
        }
 
 	public MqttClient getClient() {
