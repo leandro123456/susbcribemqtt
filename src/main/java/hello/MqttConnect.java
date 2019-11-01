@@ -62,6 +62,7 @@ public class MqttConnect implements MqttCallback{
 		Date fecha = new Date();
 		System.out.println("ERROR  SE PERDIO LA CONECCION: "+ fecha.toString());
 		
+		
 	}
 
 	@Override
@@ -72,8 +73,8 @@ public class MqttConnect implements MqttCallback{
 
    @Override
    public void messageArrived(String topic, MqttMessage message) throws Exception {
-	   System.out.println("Topico: "+topic);    
-	   System.out.println("message is : "+message);
+//	   System.out.println("Topico: "+topic);    
+//	   System.out.println("message is : "+message);
 	   devcoiaca.AnalizarMensajeCoiaca(topic, message);
        }
 
