@@ -39,6 +39,8 @@ public class HelloController {
     			options.setPassword("av1vEDacfGwXc5".toCharArray());
     			cliente.connect(options);
     		}
+    		if(valor.equals("barraparticion"))
+    			valor="/";
     		EnviodeMensajes env = new EnviodeMensajes(cliente, valor,devconf.getTopicescribir());
 			env.call();
     		
