@@ -71,10 +71,16 @@ public class DevicesCoiaca {
 		String serial = topico.replace("/activePartition", "");
 		Device device = devdao.retrieveBySerialNumber(serial);
 		if(device!=null){
-			if(device.getParticionactiva()!=null && !device.getParticionactiva().equals(mensaje)){
-				device.setParticionactiva(mensaje);
+			if(device.getParticionactiva()!=null ){
+				if(!device.getParticionactiva().equals(mensaje)){
+					device.setParticionactiva(mensaje);
+					devdao.update(device);
+					System.out.println("Se recibio mensaje ParticionActiva del serial: "+ serial+"; actualizado exitosamente");
+				}
+			}
+			else{
+				device.setParticionactiva(new String());
 				devdao.update(device);
-				System.out.println("Se recibio mensaje ParticionActiva del serial: "+ serial+"; actualizado exitosamente");
 			}
 		}else
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeZona");
