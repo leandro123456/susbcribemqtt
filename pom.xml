@@ -66,6 +66,13 @@
 		    <version>1.2.1</version>
 		</dependency>
 		
+		<!-- Notificaciones usando FIrebase -->
+		<dependency>
+		  <groupId>com.google.firebase</groupId>
+		  <artifactId>firebase-admin</artifactId>
+		  <version>6.6.0</version>
+		</dependency>
+				
 		
 <!-- 		agregarmoquette -->
 		<dependency>
