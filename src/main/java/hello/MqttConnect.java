@@ -61,6 +61,7 @@ public class MqttConnect implements MqttCallback{
 		System.out.println("ERORR ++++++++++++++++++++++++++++");
 		Date fecha = new Date();
 		System.out.println("ERROR  SE PERDIO LA CONECCION: "+ fecha.toString());
+		iniciar();
 		
 		
 	}

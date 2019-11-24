@@ -21,35 +21,24 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-            System.out.println("INICIO");
             
 //            inicio  del mio
         	MqttClient client = MqttConnect.getInstance().getClient();
-        	System.out.println("Esta conectada loro");
 			int qos = 0;
-			//if(MqttConnect.getInstance()!= null)
 			if(client !=null) {
+				System.out.println("esta conectada: "+ client.isConnected());
 				List<String> topicos= Device.obtenerClientesCoiaca();
 				for(String topico : topicos) {
 					client.subscribe(topico, qos);
 				}
 				client.subscribe("RMgmt/#", qos);
+				System.out.println("Me suscribi a todos los topicos en la plataforma");
 				
 			}
 			else
-				System.out.println("el cliente es NULO");
-		//	else
-			//	MqttConnect.getInstance();
-			System.out.println("Me suscribi");
-			
-			client = MqttConnect.getInstance().getClient();
-			System.out.println("es nukk: "+ client);
-			System.out.println("esta conectada: "+ client.isConnected());
-			
+				System.out.println("el cliente es NULO");		
             
-            //agregue proyecto moquette
-            
-            
+            //agregue proyecto moquette para un segundo broker y suscribirme a los dos;           
         };
     }
 
