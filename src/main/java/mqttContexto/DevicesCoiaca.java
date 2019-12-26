@@ -1,14 +1,20 @@
 package mqttContexto;
 
+import java.beans.DesignMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
 import Persistence.DAO.DeviceDAO;
+import Persistence.DAO.UserDAO;
 import Persistence.Model.Device;
 import Persistence.Model.DeviceNotification;
+import Persistence.Model.User;
+import hello.FirebaseController;
 
 public class DevicesCoiaca {
 	DeviceDAO devdao =new DeviceDAO();
@@ -133,9 +139,22 @@ public class DevicesCoiaca {
 				device.getParticiones().put(particion, mensaje);
 				devdao.update(device);
 			}
-			
+			EnviarNotificacionFirebase(device,mensaje);
 		}else
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeParicion");
+	}
+
+	private void EnviarNotificacionFirebase(Device device, String mensaje) {
+		List<String> destinatarios = new ArrayList<String>();
+		destinatarios.add(device.getUserowner());
+		destinatarios.addAll(device.getUsers());
+		destinatarios.addAll(device.getAdmins());
+
+		FirebaseController fire = new FirebaseController();
+		for(String user: destinatarios) {
+			fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
+		}
+		
 	}
 
 	private void AnalizarMensajeStatus(String topico, String mensaje) {

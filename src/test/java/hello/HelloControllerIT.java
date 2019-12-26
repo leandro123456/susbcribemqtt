@@ -1,5 +1,8 @@
 package hello;
 
+import org.junit.Test;
+
+
 //import static org.hamcrest.Matchers.*;
 //import static org.junit.Assert.*;
 
@@ -18,6 +21,15 @@ package hello;
 //@RunWith(SpringRunner.class)
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HelloControllerIT {
+	
+	
+	@Test
+	public void testSendNoficacionFirebase() {
+		FirebaseController fire = new FirebaseController();
+		fire.enviarNotificacion("leandrogguzman@hotmail.com", "TEST envio de Notificacion");
+		System.out.println("termino");
+	}
+	
 
   //  @LocalServerPort
   //  private int port;

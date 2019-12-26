@@ -25,6 +25,8 @@ public class User extends MongoDBObject{
 	private String role;
 	private List<String> deviceserialnumber;
 	private String cookie;
+	private List<String> firebasetoken;
+	
 	
 	public String getEmail() {
 		return email;
@@ -128,5 +130,14 @@ public class User extends MongoDBObject{
 		this.deviceserialnumber = deviceserialnumber;
 	}
 
-	
+	public List<String> getFirebasetoken() {
+		if(firebasetoken == null)
+			firebasetoken = new ArrayList<String>();
+		return firebasetoken;
+	}
+
+
+	public void setFirebasetoken(List<String> firebasetoken) {
+		this.firebasetoken = firebasetoken;
+	}
 }
