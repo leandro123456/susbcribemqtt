@@ -23,10 +23,10 @@ import org.junit.Test;
 public class HelloControllerIT {
 	
 	
-	@Test
+//	@Test
 	public void testSendNoficacionFirebase() {
 		FirebaseController fire = new FirebaseController();
-		fire.enviarNotificacion("leandrogguzman@hotmail.com", "TEST envio de Notificacion");
+		fire.enviarNotificacion("leandrogabrielguzman@gmail.com", "TEST envio de Notificacion");
 		System.out.println("termino");
 	}
 	
