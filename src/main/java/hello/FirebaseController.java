@@ -28,10 +28,10 @@ public class FirebaseController {
 	
 	public void enviarNotificacion(String username, String body) {
 		try {
-			
+			System.out.println("username que busco: "+ username);
 			User user = userdao.retrieveByMail(username);
 			List<String> tokenAborrar= new ArrayList<String>();
-			if(user.getFirebasetoken()!=null) {
+			if(user!=null && user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
