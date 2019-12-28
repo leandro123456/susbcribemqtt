@@ -31,6 +31,7 @@ public class FirebaseController {
 			
 			User user = userdao.retrieveByMail(username);
 			List<String> tokenAborrar= new ArrayList<String>();
+			if(user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
@@ -55,6 +56,7 @@ public class FirebaseController {
 			user.getFirebasetoken().removeAll(tokenAborrar);
 			userdao.update(user);
 			System.out.println("token actualizados");
+			}
 		} 
 		catch (Exception e) {
 			System.out.println("Fallo el envio del mensaje Firebase: "+ e.getMessage());
