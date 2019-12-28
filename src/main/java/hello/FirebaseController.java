@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -28,8 +29,10 @@ public class FirebaseController {
 	
 	public void enviarNotificacion(String username, String body) {
 		try {
-			System.out.println("username que busco: "+ username);
-			User user = userdao.retrieveByMail(username);
+			
+			String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
+			System.out.println("****************username que busco: "+ userdeco);
+			User user = userdao.retrieveByMail(userdeco);
 			List<String> tokenAborrar= new ArrayList<String>();
 			if(user!=null && user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
