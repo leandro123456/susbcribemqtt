@@ -1,6 +1,7 @@
 package mqttContexto;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -160,11 +161,14 @@ public class DevicesCoiaca {
 	}
 
 	private boolean enviarNotificacion(String username, String mensaje) {
-		User user =userdao.retrieveByMail(username);
-		if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
-			return true;
-		else if(mensaje.contains(Notificacion.TRIGERED) && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO))
-			return true;
+		String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
+		User user =userdao.retrieveByMail(userdeco);
+		if(user!=null) {
+			if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
+				return true;
+			else if(mensaje.contains(Notificacion.TRIGERED) && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO))
+				return true;
+		}
 		return false;
 	}
 
