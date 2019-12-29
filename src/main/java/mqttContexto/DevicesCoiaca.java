@@ -1,23 +1,23 @@
 package mqttContexto;
 
-import java.beans.DesignMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.JSONObject;
 
 import Persistence.DAO.DeviceDAO;
 import Persistence.DAO.UserDAO;
 import Persistence.Model.Device;
 import Persistence.Model.DeviceNotification;
+import Persistence.Model.Notificacion;
 import Persistence.Model.User;
 import hello.FirebaseController;
 
 public class DevicesCoiaca {
 	DeviceDAO devdao =new DeviceDAO();
+	UserDAO userdao = new UserDAO();
 	
 	public void AnalizarMensajeCoiaca(String topico, MqttMessage mensaje){
 		String valor = new String(mensaje.getPayload());
@@ -139,7 +139,8 @@ public class DevicesCoiaca {
 				device.getParticiones().put(particion, mensaje);
 				devdao.update(device);
 			}
-			EnviarNotificacionFirebase(device,mensaje);
+			if(!mensaje.contains("pending"))
+				EnviarNotificacionFirebase(device,mensaje);
 		}else
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeParicion");
 	}
@@ -152,9 +153,19 @@ public class DevicesCoiaca {
 
 		FirebaseController fire = new FirebaseController();
 		for(String user: destinatarios) {
-			fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
+			if(enviarNotificacion(user,mensaje))
+				fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
 		}
 		
+	}
+
+	private boolean enviarNotificacion(String username, String mensaje) {
+		User user =userdao.retrieveByMail(username);
+		if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
+			return true;
+		else if(mensaje.contains(Notificacion.TRIGERED) && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO))
+			return true;
+		return false;
 	}
 
 	private void AnalizarMensajeStatus(String topico, String mensaje) {
