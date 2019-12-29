@@ -161,15 +161,20 @@ public class DevicesCoiaca {
 	}
 
 	private boolean enviarNotificacion(String username, String mensaje) {
-		String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
-		User user =userdao.retrieveByMail(userdeco);
-		if(user!=null) {
-			if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
-				return true;
-			else if(mensaje.contains(Notificacion.TRIGERED) && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO))
-				return true;
+		try {
+			String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
+			User user =userdao.retrieveByMail(userdeco);
+			if(user!=null) {
+				if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
+					return true;
+				else if(mensaje.contains(Notificacion.TRIGERED) && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO))
+					return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 
 	private void AnalizarMensajeStatus(String topico, String mensaje) {
