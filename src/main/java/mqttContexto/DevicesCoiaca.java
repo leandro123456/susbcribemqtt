@@ -154,6 +154,7 @@ public class DevicesCoiaca {
 
 		FirebaseController fire = new FirebaseController();
 		for(String user: destinatarios) {
+			System.out.println("------------------------ENVIO DE NOTIFICACION: "+ user);
 			if(enviarNotificacion(user,mensaje))
 				fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
 		}
