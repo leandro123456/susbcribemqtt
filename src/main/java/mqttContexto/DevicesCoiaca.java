@@ -148,7 +148,7 @@ public class DevicesCoiaca {
 
 	private void EnviarNotificacionFirebase(Device device, String mensaje) {
 		List<String> destinatarios = new ArrayList<String>();
-		destinatarios.add(device.getUserowner());
+		destinatarios.add(new String(Base64.getDecoder().decode(device.getUserowner().getBytes())));
 		destinatarios.addAll(device.getUsers());
 		destinatarios.addAll(device.getAdmins());
 
@@ -163,8 +163,7 @@ public class DevicesCoiaca {
 
 	private boolean enviarNotificacion(String username, String mensaje) {
 		try {
-			String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
-			User user =userdao.retrieveByMail(userdeco);
+			User user =userdao.retrieveByMail(username);
 			if(user!=null) {
 				if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&& user.getNotificaciones().get(Notificacion.CONDICION_ARMADO)!=null && user.getNotificaciones().get(Notificacion.CONDICION_ARMADO))
 					return true;
