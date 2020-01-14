@@ -30,9 +30,9 @@ public class FirebaseController {
 	public void enviarNotificacion(String username, String body) {
 		try {
 			
-			String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
-			System.out.println("****************username que busco: "+ userdeco);
-			User user = userdao.retrieveByMail(userdeco);
+			//String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
+			System.out.println("****************username que busco: "+ username);
+			User user = userdao.retrieveByMail(username);
 			List<String> tokenAborrar= new ArrayList<String>();
 			if(user!=null && user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
