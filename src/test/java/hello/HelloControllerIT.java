@@ -1,5 +1,7 @@
 package hello;
 
+import java.util.Random;
+
 import org.junit.Test;
 
 
@@ -22,6 +24,18 @@ import org.junit.Test;
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HelloControllerIT {
 	
+	
+//	@Test
+	public void generarRandomLongitud9(){
+		for(int i=0; i<10 ;i++){
+			Random numsala = new Random();
+			String val = numsala.nextInt()+"";
+			val=val.replace("-", "");
+			if(val.length()>9)
+				val=val.substring(0, 9);
+			System.out.println("num: "+ val);
+		}
+	}
 	
 //	@Test
 	public void testSendNoficacionFirebase() {
