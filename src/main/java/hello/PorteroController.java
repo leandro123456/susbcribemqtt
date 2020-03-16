@@ -1,5 +1,6 @@
 package hello;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Random;
 
@@ -26,13 +27,16 @@ public class PorteroController {
 		//envio de notificacion al usuario
 		try {
 			String numsala= generarrandomfijo();
+			final URI uri = new URI("https://appr.tc/r/"+numsala);
 			FirebaseController fire = new FirebaseController();
-			fire.enviarNotificacion(user, "llego una notificacion a su servicio de porteria. ingrese al siguiente link para atenderlo: https://appr.tc/r/"+numsala);
+			fire.enviarNotificacionDoorman(user, "llego una notificacion a su servicio de porteria. ingrese al siguiente link para atenderlo: ", uri);
 
 		} catch (Exception e) {
+			System.out.println("ERROR DOORMAN!!!!");
 			return new ModelAndView("redirect:http://localhost:8080/doorman/error");
 		}
-		return new ModelAndView("redirect:http://www.google.es");
+		System.out.println("acepto doorman!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		return new ModelAndView("redirect:https://www.facebook.com");
 	}
 	
 

@@ -2,6 +2,7 @@ package hello;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -38,11 +39,13 @@ public class FirebaseController {
 			for(String token: user.getFirebasetoken()) {
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
-				RequestBody body1 = RequestBody.create(mediaType, "{\"notification\":{ \"title\": \"cDash Notificacion\", "
+				RequestBody body1 = RequestBody.create(mediaType, "{\"notification\":{ "
+						+ "\"title\": \"cDash Notificacion\", "
 						+ "\"body\": \""+body+"\","
 						+ " \"icon\": \"/images/manifest/icon-96x96.png\" }, "
-						+ "\"to\" : \""+token+"\"}");
-
+						+ "\"to\" : \""+token+"\""
+								+ "}");
+				
 				Request request = new Request.Builder()
 						.url("https://fcm.googleapis.com/fcm/send")
 						.method("POST", body1)
@@ -66,6 +69,51 @@ public class FirebaseController {
 			e.printStackTrace();
 		}
 	}
+	
+	public void enviarNotificacionDoorman(String username, String body, URI uri) {
+		try {
+			System.out.println("****************username que busco: "+ username);
+			User user = userdao.retrieveByMail(username);
+			List<String> tokenAborrar= new ArrayList<String>();
+			if(user!=null && user.getFirebasetoken()!=null) {
+			for(String token: user.getFirebasetoken()) {
+				OkHttpClient client = new OkHttpClient();
+				MediaType mediaType = MediaType.parse("application/json");
+
+				RequestBody body2 = RequestBody.create(mediaType, ""
+						+ "{\"to\":\"/"	+ token
+						+ "\",\"notification\": "
+						+ "{\"title\": \""+"cDash Notificacion"+ "\","
+						+ "\"body\":\""+body+ "\","
+						+ "\"click_action\": \""+uri+"\""
+						+ "}}");
+				
+				Request request = new Request.Builder()
+						.url("https://fcm.googleapis.com/fcm/send")
+						.method("POST", body2)
+						.addHeader("Authorization", "key=AIzaSyAmq0sl80gwzNIj7b74Y-QrpwpBSe-itWI")
+						.addHeader("Content-Type", "application/json")
+						.build();
+				Response response = client.newCall(request).execute();
+				AnalizarCodigoRespuesta(response.code());
+				String responseString= response.body().string();
+				Boolean borrartoken= verificarRespuesta(responseString, user, token);
+				if(borrartoken)
+					tokenAborrar.add(token);
+			}
+			user.getFirebasetoken().removeAll(tokenAborrar);
+			userdao.update(user);
+			System.out.println("token actualizados");
+			}
+		} 
+		catch (Exception e) {
+			System.out.println("Fallo el envio del mensaje Firebase: "+ e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 	private void AnalizarCodigoRespuesta(int code) {
 		System.out.println("llego este codigo: "+ code);
 		
