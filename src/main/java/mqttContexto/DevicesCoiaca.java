@@ -149,6 +149,8 @@ public class DevicesCoiaca {
 			System.out.println("----------------------------------------------------");
 			if(!mensaje.equals("pending"))
 				EnviarNotificacionFirebase(device,mensaje);
+			else
+				System.out.println("Este es otro mensaje: "+ mensaje);
 		}else
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeParicion");
 	}
