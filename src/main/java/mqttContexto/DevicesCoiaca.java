@@ -140,6 +140,13 @@ public class DevicesCoiaca {
 				device.getParticiones().put(particion, mensaje);
 				devdao.update(device);
 			}
+			System.out.println("----------------------------------------------------");
+			System.out.println("----------------------------------------------------");
+			System.out.println("----------------------------------------------------");
+			System.out.println("MENSAJE RECIBIDO			"+ mensaje);
+			System.out.println("----------------------------------------------------");
+			System.out.println("----------------------------------------------------");
+			System.out.println("----------------------------------------------------");
 			if(!mensaje.contains("pending"))
 				EnviarNotificacionFirebase(device,mensaje);
 		}else
