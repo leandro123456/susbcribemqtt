@@ -37,6 +37,7 @@ public class FirebaseController {
 			List<String> tokenAborrar= new ArrayList<String>();
 			if(user!=null && user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
+				System.out.println("cantidad de tokens: "+ user.getFirebasetoken().size());
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
 				RequestBody body1 = RequestBody.create(mediaType, "{\"notification\":{ "
