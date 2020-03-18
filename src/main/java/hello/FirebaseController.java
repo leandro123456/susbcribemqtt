@@ -71,6 +71,7 @@ public class FirebaseController {
 	}
 	
 	public void enviarNotificacionDoorman(String username, String body, URI uri) {
+		enviarNotificacion(username, body);
 		try {
 			System.out.println("****************username que busco: "+ username);
 			User user = userdao.retrieveByMail(username);
