@@ -12,7 +12,7 @@ public class Notificacion extends MongoDBObject{
 	static final public String DISARMED="disarmed";
 	static final public String ARMED_HOME="armed_home";
 	static final public String ARMED_ALL ="armed_all";
-	static final public String TRIGERED = "trigered";
+	static final public String TRIGERED = "triggered";
 	
 	//comparador
 	static final public String CONDICION_ARMADO="condicion_armado";
