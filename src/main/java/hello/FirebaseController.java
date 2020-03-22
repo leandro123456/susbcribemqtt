@@ -32,12 +32,12 @@ public class FirebaseController {
 		try {
 			
 			//String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
-			System.out.println("****************username que busco: "+ username);
+			System.out.println("****************username que busco notification: "+ username);
 			User user = userdao.retrieveByMail(username);
 			List<String> tokenAborrar= new ArrayList<String>();
 			if(user!=null && user.getFirebasetoken()!=null) {
 			for(String token: user.getFirebasetoken()) {
-				System.out.println("cantidad de tokens: "+ user.getFirebasetoken().size());
+				System.out.println("cantidad de tokens notification: "+ user.getFirebasetoken().size());
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
 				RequestBody body1 = RequestBody.create(mediaType, "{\"notification\":{ "
@@ -72,7 +72,7 @@ public class FirebaseController {
 	}
 	
 	public void enviarNotificacionDoorman(String username, String body, URI uri) {
-		enviarNotificacion(username, body);
+		enviarNotificacion(username, "este es un mensaje de prueba");
 		try {
 			System.out.println("****************username que busco: "+ username);
 			User user = userdao.retrieveByMail(username);
