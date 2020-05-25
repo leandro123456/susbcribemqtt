@@ -39,6 +39,17 @@ public class Device extends MongoDBObject{
 	private String status;
 	private Map<String,String> zonasObtenidas;
 	private String particionactiva;
+	private String calle;
+	private String numero;
+	private String depto;
+	private String piso;
+	private String localidad;
+	private String codpostal;
+	private String provincia;
+	private String pais;
+	private String tipodireccion;
+	private String codigouri;
+	private String uridoorman;
 
 	
 	public Device() {
@@ -74,6 +85,14 @@ public class Device extends MongoDBObject{
 		this.deviceconfiguration = deviceconfiguration;
 	}
 
+	public String getUridoorman() {
+		return uridoorman;
+	}
+
+	public void setUridoorman(String uridoorman) {
+		this.uridoorman = uridoorman;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -86,12 +105,44 @@ public class Device extends MongoDBObject{
 		return password;
 	}
 
+	public String getCodigouri() {
+		return codigouri;
+	}
+
+	public void setCodigouri(String codigouri) {
+		this.codigouri = codigouri;
+	}
+
 	public void setPassword(byte[] password) {
 		this.password = password;
 	}
 
 	public String getTipo() {
 		return tipo;
+	}
+
+	public String getLocalidad() {
+		return localidad;
+	}
+
+	public void setLocalidad(String localidad) {
+		this.localidad = localidad;
+	}
+
+	public String getCodpostal() {
+		return codpostal;
+	}
+
+	public void setCodpostal(String codpostal) {
+		this.codpostal = codpostal;
+	}
+
+	public String getTipodireccion() {
+		return tipodireccion;
+	}
+
+	public void setTipodireccion(String tipodireccion) {
+		this.tipodireccion = tipodireccion;
 	}
 
 	public void setTipo(String tipo) {
@@ -108,6 +159,54 @@ public class Device extends MongoDBObject{
 
 	public Boolean getDelete() {
 		return delete;
+	}
+
+	public String getCalle() {
+		return calle;
+	}
+
+	public void setCalle(String calle) {
+		this.calle = calle;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getDepto() {
+		return depto;
+	}
+
+	public void setDepto(String depto) {
+		this.depto = depto;
+	}
+
+	public String getPiso() {
+		return piso;
+	}
+
+	public void setPiso(String piso) {
+		this.piso = piso;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	public String getPais() {
+		return pais;
+	}
+
+	public void setPais(String pais) {
+		this.pais = pais;
 	}
 
 	public void setDelete(Boolean delete) {

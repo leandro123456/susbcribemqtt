@@ -25,18 +25,19 @@ public class PorteroController {
 	public ModelAndView enviarNotificacionPortero(@PathVariable String user) {
 		//envio de ventana de portero al solicitante
 		//envio de notificacion al usuario
+		String numsala= generarrandomfijo();
+		String uriv = "https://appr.tc/r/"+numsala;
 		try {
-			String numsala= generarrandomfijo();
-			final URI uri = new URI("https://appr.tc/r/"+numsala);
+			final URI uri = new URI(uriv);
 			FirebaseController fire = new FirebaseController();
-			fire.enviarNotificacionDoorman(user, "llego una notificacion a su servicio de porteria. ingrese al siguiente link para atenderlo: ", uri);
+			fire.enviarNotificacionDoorman(user, "Llego una notificacion a su servicio de porteria. Pulse en la notificacion para atenderlo ", uri);
 
 		} catch (Exception e) {
 			System.out.println("ERROR DOORMAN!!!!");
 			return new ModelAndView("redirect:http://localhost:8080/doorman/error");
 		}
 		System.out.println("acepto doorman!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		return new ModelAndView("redirect:https://www.facebook.com");
+		return new ModelAndView("redirect:"+uriv);
 	}
 	
 
