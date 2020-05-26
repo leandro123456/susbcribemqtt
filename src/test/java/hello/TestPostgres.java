@@ -1,5 +1,9 @@
 package hello;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +15,7 @@ public class TestPostgres {
 	@Autowired
     private MqttStatusConnectionInterface mqttStatusConnectionInterface;
 	
-	@Test
+	//@Test
 	public void testCreateRegistroPostgres() {
 		try {
 			MqttStatusConnectionModel status = new MqttStatusConnectionModel();
@@ -24,5 +28,35 @@ public class TestPostgres {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testConnectionPosgres() {
+		
+		 // We register the PostgreSQL driver
+        // Registramos el driver de PostgresSQL
+        try { 
+            Class.forName("org.postgresql.Driver");
+            
+            Connection connection = null;
+            // Database connect
+            // Conectamos con la base de datos
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/cdashnotifications",
+                    "cdash", "123456");
+            
+            boolean valid = connection.isValid(50000);
+            System.out.println(valid ? "TEST OK" : "TEST FAIL");
+            PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus values('00001','coiaca001','0','online','2020-05-18T17:55:29Z')");
+            st.execute();
+            st.close();
+            
+        } catch (Exception ex) {
+            System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+        }
+		
+        
+		
+	}
+	
 
 }
