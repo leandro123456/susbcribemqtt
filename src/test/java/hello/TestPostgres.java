@@ -47,9 +47,9 @@ public class TestPostgres {
             boolean valid = connection.isValid(50000);
             System.out.println(valid ? "TEST OK" : "TEST FAIL");
             PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus (notification_id,broker,brokerint,brokerstatus,created_on) values (?,?,?,?,?)");
-            st.setLong(1, new Long("123213123"));
+            st.setLong(1, MqttStatusConnectionController.horaLong());
             st.setString(2, "coiaca001");
-            st.setInt(3, 1);
+            st.setInt(3, MqttStatusConnectionModel.ONLINE_BROKER_INT);
             st.setString(4, MqttStatusConnectionModel.ONLINE_BROKER);
             st.setString(5, MqttStatusConnectionController.hora());
             st.execute();

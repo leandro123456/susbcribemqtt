@@ -13,6 +13,8 @@ import javax.persistence.Table;
 public class MqttStatusConnectionModel {
 	public static final String ONLINE_BROKER="online";
 	public static final String OFFLINE_BROKER="offline";
+	public static final Integer ONLINE_BROKER_INT=1;
+	public static final Integer OFFLINE_BROKER_INT=0;
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

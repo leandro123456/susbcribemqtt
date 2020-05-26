@@ -3,6 +3,7 @@ package postgresConnect.Controller;
 import java.sql.Date;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,10 +38,13 @@ public class MqttStatusConnectionController {
 		
 	}
 
-	
+	public static Long horaLong() {
+		Calendar c = Calendar.getInstance();
+		return c.getTimeInMillis();
+	}
 	
 	public static String hora(){
-		String fecha = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT);
+		String fecha = ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
 		System.out.println("Esta es la fecha del Test: "+ fecha);
 		return fecha;
 	}
