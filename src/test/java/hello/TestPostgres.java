@@ -29,7 +29,7 @@ public class TestPostgres {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testConnectionPosgres() {
 		
 		 // We register the PostgreSQL driver
@@ -46,9 +46,15 @@ public class TestPostgres {
             
             boolean valid = connection.isValid(50000);
             System.out.println(valid ? "TEST OK" : "TEST FAIL");
-            PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus values('00001','coiaca001','0','online','2020-05-18T17:55:29Z')");
+            PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus (notification_id,broker,brokerint,brokerstatus,created_on) values (?,?,?,?,?)");
+            st.setLong(1, new Long("123213123"));
+            st.setString(2, "coiaca001");
+            st.setInt(3, 1);
+            st.setString(4, MqttStatusConnectionModel.ONLINE_BROKER);
+            st.setString(5, MqttStatusConnectionController.hora());
             st.execute();
             st.close();
+            connection.close();
             
         } catch (Exception ex) {
             System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
