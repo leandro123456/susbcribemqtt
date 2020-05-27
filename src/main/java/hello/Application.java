@@ -8,6 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 
 import Persistence.Model.Device;
 
@@ -17,6 +22,14 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+    
+    @Bean
+	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> setPort() {
+		return factory -> {
+			factory.setPort(8090);
+		};
+    }
+    
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

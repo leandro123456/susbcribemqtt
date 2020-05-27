@@ -29,7 +29,7 @@ public class TestPostgres {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testConnectionPosgres() {
 		
 		 // We register the PostgreSQL driver
