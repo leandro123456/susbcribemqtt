@@ -42,11 +42,19 @@ public class FirebaseController {
 				System.out.println("este es el body que recibo: "+ body);
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
-				RequestBody body1 = RequestBody.create(mediaType, "{\"notification\":{ "
-						+ "\"title\": \"cDash Notificacion\", "
-						+ "\"body\": \""+body+"\","
-						+ "\"to\" : \""+token+"\""
-								+ "}");
+				RequestBody body1 = RequestBody.create(mediaType,
+								  ""
+								+ "{\"to\":\"/"	+ token
+								+ "\",\"notification\": "
+								+ "{\"title\": \""+"cDash Notificacion"+ "\","
+								+ "\"body\":\""+body+ "\","
+								+ "\"click_action\": \""+"https://cdash.space"+"\""
+								+ "}}");
+//						"{\"notification\":{ "
+//						+ "\"title\": \"cDash Notificacion\", "
+//						+ "\"body\": \""+body+"\","
+//						+ "\"to\" : \""+token+"\""
+//								+ "}");
 				System.out.println("este es el mensaje que envio: "+ body1);
 				Request request = new Request.Builder()
 						.url("https://fcm.googleapis.com/fcm/send")
@@ -90,6 +98,7 @@ public class FirebaseController {
 						+ "\"click_action\": \""+uri+"\""
 						+ "}}");
 				
+				System.out.println(" Este es el BODY: "+ body2);
 				Request request = new Request.Builder()
 						.url("https://fcm.googleapis.com/fcm/send")
 						.method("POST", body2)
