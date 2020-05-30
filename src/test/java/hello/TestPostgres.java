@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.Calendar;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,18 +51,21 @@ public class TestPostgres {
             String hora=MqttStatusConnectionController.hora();
             //'2020-05-18T17:55:39Z'
             System.out.println("HORA: "+ hora);
+            Calendar cal = Calendar.getInstance();  
+            Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
             PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus (notification_id,broker,brokerint,brokerstatus,created_on) values (?,?,?,?,?)");
             st.setLong(1, MqttStatusConnectionController.horaLong());
             st.setString(2, "coiaca001");
             st.setInt(3, MqttStatusConnectionModel.ONLINE_BROKER_INT);
             st.setString(4, MqttStatusConnectionModel.ONLINE_BROKER);
-            st.setTimestamp(5, new Timestamp(2020, 5, 12, 15, 55, 39, 00));
+            st.setTimestamp(5, timestamp);
             st.execute();
             st.close();
             connection.close();
             
         } catch (Exception ex) {
             System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+            ex.printStackTrace();
         }
 		
         
