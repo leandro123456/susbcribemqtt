@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,16 +48,16 @@ public class MqttStatusConnectionController {
 	}
 	
 	public static String hora(){
-//		String fecha = ZonedDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-//		System.out.println("Esta es la fecha del Test: "+ fecha);
-//		return fecha;
+		String fecha = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT);
+		String[] vector = fecha.split(Pattern.quote("."));
+		System.out.println("Proyecto: "+ vector[0]+"Z");
 		
 		//DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Date date = new Date(horaLong());
-		long time = date.getTime();
-		Timestamp tim = new Timestamp(time);
-		String result = tim.toString();
-		System.out.println("Esta es la fecha del Test: "+ result);
-		return result;
+//		Date date = new Date(horaLong());
+//		long time = date.getTime();
+//		Timestamp tim = new Timestamp(time);
+//		String result = tim.toString();
+//		System.out.println("Esta es la fecha del Test: "+ result);
+		return vector[0]+"Z";
 	}
 }
