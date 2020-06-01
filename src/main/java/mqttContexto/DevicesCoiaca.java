@@ -135,8 +135,12 @@ public class DevicesCoiaca {
 					device.getParticiones().put(particion, mensaje);
 					devdao.update(device);
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; actualizado exitosamente");
-				}else
+				}else {
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; No se actualizo");
+					System.out.println("No se actualizo, solo se notificara esta llegada");
+					//Notificar Albackend
+					return;
+				}
 			}else{
 				device.getParticiones().put(particion, mensaje);
 				devdao.update(device);
