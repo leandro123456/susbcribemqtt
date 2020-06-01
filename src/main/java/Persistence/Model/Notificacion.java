@@ -18,6 +18,7 @@ public class Notificacion extends MongoDBObject{
 	static final public String CONDICION_ARMADO="condicion_armado";
 	static final public String CONDICION_DISPARADO="condicion_disparado";
 	
+	
 	//condicion
 	static final public String IGUAL = "igual";
 	static final public String MAYOR = "mayor";

@@ -47,14 +47,14 @@ public class TestPostgres {
                     "cdash", "123456");
             
             boolean valid = connection.isValid(50000);
-            System.out.println(valid ? "TEST OK" : "TEST FAIL");
+            System.out.println(valid ? "Connection OK" : "Connection FAIL");
             String hora=MqttStatusConnectionController.hora();
             //'2020-05-18T17:55:39Z'
             System.out.println("HORA: "+ hora);
             Calendar cal = Calendar.getInstance();  
             Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
             PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus (notification_id,broker,brokerint,brokerstatus,created_on) values (?,?,?,?,?)");
-            st.setLong(1, MqttStatusConnectionController.horaLong());
+            st.setLong(1, 12122);
             st.setString(2, "coiaca001");
             st.setInt(3, MqttStatusConnectionModel.ONLINE_BROKER_INT);
             st.setString(4, MqttStatusConnectionModel.ONLINE_BROKER);

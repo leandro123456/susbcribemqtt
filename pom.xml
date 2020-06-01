@@ -78,6 +78,19 @@
 		    <artifactId>persistence-api</artifactId>
 		    <version>1.0.2</version>
 		</dependency>
+		
+		
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>smtp</artifactId>
+		    <version>1.6.0</version>
+		</dependency>
+		        
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.6.0</version>
+		</dependency>
         
         
 

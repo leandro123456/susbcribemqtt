@@ -15,6 +15,7 @@ import Persistence.Model.DeviceNotification;
 import Persistence.Model.Notificacion;
 import Persistence.Model.User;
 import hello.FirebaseController;
+import hello.MailController;
 
 public class DevicesCoiaca {
 	DeviceDAO devdao =new DeviceDAO();
@@ -163,18 +164,45 @@ public class DevicesCoiaca {
 		destinatarios.addAll(device.getAdmins());
 
 		FirebaseController fire = new FirebaseController();
+		MailController mail = new MailController();
 		for(String user: destinatarios) {
 			System.out.println("------------------------ENVIO DE NOTIFICACION: "+ user);
 			boolean enviarNotificacion= enviarNotificacion(user,mensaje);
-			if(enviarNotificacion && mensaje.contains(Notificacion.TRIGERED))
+			if(enviarNotificacion && mensaje.contains(Notificacion.TRIGERED)) {
 				fire.enviarNotificacion(user, "¡Su alarma se ha Disparado! \n Verifique el Estado");
-			else if (enviarNotificacion) {
+			}else if (enviarNotificacion) {
 				fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
+			}
+			boolean enviarMail = enviarMail(user,mensaje);
+			if(enviarMail && mensaje.contains(Notificacion.TRIGERED)) {
+				mail.enviarNotificacion(user, "¡Su alarma se ha Disparado! \n Verifique el Estado");
+			}else if (enviarMail) {
+				mail.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
 			}
 		}
 		
 	}
 
+	private boolean enviarMail(String username, String mensaje) {
+		try {
+			User user =userdao.retrieveByMail(username);
+			if(user!=null) {
+				if((mensaje.contains("armed") || mensaje.contains(Notificacion.DISARMED))&&  
+						user.getNotificaciones().get(Notificacion.CONDICION_ARMADO) && 
+						user.getNotificaciones().get(Notificacion.ENVIAR_MAIL))
+					return true;
+				else if(mensaje.contains(Notificacion.TRIGERED) && 
+						user.getNotificaciones().get(Notificacion.CONDICION_DISPARADO) && 
+						user.getNotificaciones().get(Notificacion.ENVIAR_MAIL))
+					return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	private boolean enviarNotificacion(String username, String mensaje) {
 		try {
 			User user =userdao.retrieveByMail(username);
