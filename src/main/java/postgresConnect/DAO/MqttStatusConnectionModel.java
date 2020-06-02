@@ -16,6 +16,16 @@ public class MqttStatusConnectionModel {
 	public static final Integer ONLINE_BROKER_INT=1;
 	public static final Integer OFFLINE_BROKER_INT=0;
 	
+	public static final String DOWN_BROKER="down";
+	public static final Integer DOWN_BROKER_INT=3;
+	public static final String DOWN_BROKER_START="down_start";
+	public static final Integer DOWN_BROKER_START_INT=4;
+	
+	//Serial Desconocido
+	public static final String SERIAL_UNKNOW="serial_unknow";
+	public static final Integer SERIAL_UNKNOW_INT=5;
+	
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long notification_id;

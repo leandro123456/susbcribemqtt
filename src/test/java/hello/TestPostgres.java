@@ -3,8 +3,6 @@ package hello;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +31,19 @@ public class TestPostgres {
 	
 	@Test
 	public void testConnectionPosgres() {
-		
-		 // We register the PostgreSQL driver
-        // Registramos el driver de PostgresSQL
         try { 
             Class.forName("org.postgresql.Driver");
-            
             Connection connection = null;
-            // Database connect
-            // Conectamos con la base de datos
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/cdashnotifications",
                     "cdash", "123456");
-            
             boolean valid = connection.isValid(50000);
             System.out.println(valid ? "Connection OK" : "Connection FAIL");
             String hora=MqttStatusConnectionController.hora();
-            //'2020-05-18T17:55:39Z'
             System.out.println("HORA: "+ hora);
-            Calendar cal = Calendar.getInstance();  
-            Timestamp timestamp = new Timestamp(cal.getTimeInMillis());
-//            PreparedStatement st = connection.prepareStatement("insert into BrokerConnectionStatus (notification_id,broker,brokerint,brokerstatus,created_on) values (?,?,?,?,?)");
-//            st.setLong(1, 12122);
-//            st.setString(2, "coiaca001");
-//            st.setInt(3, MqttStatusConnectionModel.ONLINE_BROKER_INT);
-//            st.setString(4, MqttStatusConnectionModel.ONLINE_BROKER);
-//            st.setTimestamp(5, timestamp);
-            PreparedStatement st = connection.prepareStatement(" insert into BrokerConnectionStatus values('00001','coiaca001','0','online','2020-05-18T17:55:29Z');");
+            PreparedStatement st = connection.prepareStatement(" insert into BrokerConnectionStatus "
+            		+ "values('"+"00001"+"','coiaca001','"+MqttStatusConnectionModel.ONLINE_BROKER_INT+""
+            		+ "','"+MqttStatusConnectionModel.ONLINE_BROKER+"','"+hora+"');");
             st.execute();
             st.close();
             connection.close();

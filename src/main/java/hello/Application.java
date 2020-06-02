@@ -1,6 +1,7 @@
 package hello;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.springframework.boot.CommandLineRunner;
@@ -34,7 +35,6 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-            
 //            inicio  del mio
         	MqttClient client = MqttConnect.getInstance().getClient();
 			int qos = 0;
@@ -54,7 +54,5 @@ public class Application {
             //agregue proyecto moquette para un segundo broker y suscribirme a los dos;           
         };
     }
-
-
 }
 

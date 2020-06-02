@@ -1,6 +1,9 @@
 package postgresConnect.Controller;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,26 +41,103 @@ public class MqttStatusConnectionController {
 			e.printStackTrace();
 			return "fallo";
 		}
+	}
+	
+	@GetMapping("/testInsertAll")
+	public String getTestInsertAll() {
+		//MqttStatusConnectionModel.ONLINE_BROKER_INT
+		//MqttStatusConnectionModel.ONLINE_BROKER
+		Boolean result1=InserStatusBroker(MqttStatusConnectionModel.ONLINE_BROKER_INT, MqttStatusConnectionModel.ONLINE_BROKER);
+		System.out.println("Result 1 status: "+ result1);
+		Boolean result2 = InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER, MqttStatusConnectionModel.DOWN_BROKER_INT, "caida de test");
+		System.out.println("Result 2 status: "+ result2);
+		Boolean result3 =InsertSerialDesconocido(MqttStatusConnectionModel.SERIAL_UNKNOW, MqttStatusConnectionModel.SERIAL_UNKNOW_INT, "dasdsdsd00001");
+		System.out.println("Result 3 status: "+ result3);
+		return(result1&result2&result3)+"";
+	}
+	
+	
+	public static Boolean InserStatusBroker(Integer razoncode, String razon) {
+		try { 
+            Class.forName("org.postgresql.Driver");
+            Connection connection = null;
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/cdashnotifications",
+                    "cdash", "123456");
+            boolean valid = connection.isValid(50000);
+            System.out.println(valid ? "Connection OK" : "Connection FAIL");
+            String hora=MqttStatusConnectionController.hora();
+            System.out.println("HORA: "+ hora);
+            PreparedStatement st = connection.prepareStatement(" insert into BrokerConnectionStatus "
+            		+ "values('"+"00001"+"','coiaca001','"+razoncode+""
+            		+ "','"+razon+"','"+hora+"');");
+            st.execute();
+            st.close();
+            connection.close();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Error al registrar el driver de PostgreSQL: " + ex);
+            ex.printStackTrace();
+            return false;
+        }
 		
-		
+	}
+	
+	public static Boolean InsertAlertaCaida(String razon, Integer code, String description) {
+		try { 
+            Class.forName("org.postgresql.Driver");
+            Connection connection = null;
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/cdashnotifications",
+                    "cdash", "123456");
+            boolean valid = connection.isValid(50000);
+            System.out.println(valid ? "Connection OK" : "Connection FAIL");
+            String hora=MqttStatusConnectionController.hora();
+            PreparedStatement st = connection.prepareStatement(" insert into BrokerFailed "
+            		+ "values('coiaca001','"+razon+""
+            		+ "','"+code+"','"+description+"','"+hora+"');");
+            st.execute();
+            st.close();
+            connection.close();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("ERROR al registrar el driver de PostgreSQL: " + ex);
+            ex.printStackTrace();
+            return false;
+        }
 	}
 
-	public static Long horaLong() {
-		Calendar c = Calendar.getInstance();
-		return c.getTimeInMillis();
+	public static Boolean InsertSerialDesconocido(String serialUnknow, Integer serialUnknowInt, String serial) {
+		try { 
+            Class.forName("org.postgresql.Driver");
+            Connection connection = null;
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/cdashnotifications",
+                    "cdash", "123456");
+            boolean valid = connection.isValid(50000);
+            System.out.println(valid ? "Connection OK" : "Connection FAIL");
+            String hora=MqttStatusConnectionController.hora();
+            PreparedStatement st = connection.prepareStatement(" insert into SerialUnknow "
+            		+ "values('"+serialUnknow+"','"+serialUnknowInt+"','"+serial+"','"+hora+"');");
+            st.execute();
+            st.close();
+            connection.close();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("ERROR al registrar el driver de PostgreSQL: " + ex);
+            ex.printStackTrace();
+            return false;
+        }
+		
 	}
+	
+
 	
 	public static String hora(){
 		String fecha = ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT);
 		String[] vector = fecha.split(Pattern.quote("."));
-		System.out.println("Proyecto: "+ vector[0]+"Z");
-		
-		//DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//		Date date = new Date(horaLong());
-//		long time = date.getTime();
-//		Timestamp tim = new Timestamp(time);
-//		String result = tim.toString();
-//		System.out.println("Esta es la fecha del Test: "+ result);
 		return vector[0]+"Z";
 	}
+
+
 }

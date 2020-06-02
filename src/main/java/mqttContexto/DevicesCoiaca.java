@@ -16,6 +16,8 @@ import Persistence.Model.Notificacion;
 import Persistence.Model.User;
 import hello.FirebaseController;
 import hello.MailController;
+import postgresConnect.Controller.MqttStatusConnectionController;
+import postgresConnect.DAO.MqttStatusConnectionModel;
 
 public class DevicesCoiaca {
 	DeviceDAO devdao =new DeviceDAO();
@@ -55,8 +57,11 @@ public class DevicesCoiaca {
 			device.getLastnotification().setTime(new Date().toString());
 			devdao.update(device);
 			System.out.println("Se recibio mensaje Estado del serial: "+ serial+"; actualizado exitosamente");
-		}else
+		}else {
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeEstadoDevices");
+			MqttStatusConnectionController.InsertSerialDesconocido(MqttStatusConnectionModel.SERIAL_UNKNOW, 
+					MqttStatusConnectionModel.SERIAL_UNKNOW_INT, serial);
+		}
 	}
 
 	private void AnalizarMensajeEstadoDevices(String topico, String mensaje) {
@@ -137,23 +142,16 @@ public class DevicesCoiaca {
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; actualizado exitosamente");
 				}else {
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; No se actualizo");
-					System.out.println("No se actualizo, solo se notificara esta llegada");
-					//Notificar Albackend
+					MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER, 
+							MqttStatusConnectionModel.DOWN_BROKER_INT, "mqttclient caida sin envio de notificacion");
 					return;
 				}
 			}else{
 				device.getParticiones().put(particion, mensaje);
 				devdao.update(device);
 			}
-			System.out.println("----------------------------------------------------");
-			System.out.println("----------------------------------------------------");
-			System.out.println("----------------------------------------------------");
-			System.out.println("MENSAJE RECIBIDO			"+ mensaje);
-			System.out.println("----------------------------------------------------");
-			System.out.println("----------------------------------------------------");
-			System.out.println("----------------------------------------------------");
+			System.out.println("MENSAJE RECIBIDO A NOTIFICAR: "+ mensaje);
 			if(!mensaje.equals("pending")) {
-				System.out.println("---------------- entro en el IF");
 				EnviarNotificacionFirebase(device,mensaje);
 			}else
 				System.out.println("Este es otro mensaje: "+ mensaje);
