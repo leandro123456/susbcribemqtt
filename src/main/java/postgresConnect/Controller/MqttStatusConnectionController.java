@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hello.util.Settings;
 import postgresConnect.DAO.MqttStatusConnectionInterface;
 import postgresConnect.DAO.MqttStatusConnectionModel;
 
@@ -29,6 +30,7 @@ public class MqttStatusConnectionController {
 	
 	@GetMapping("/testInsert")
 	public String getTestInsertStatus() {
+		if(Settings.getInstance().getUsarPostgresql()) {
 		try {
 			MqttStatusConnectionModel status = new MqttStatusConnectionModel();
 			status.setBroker("coiaca001");
@@ -41,12 +43,13 @@ public class MqttStatusConnectionController {
 			e.printStackTrace();
 			return "fallo";
 		}
+		}
+		return "no esta configurado";
 	}
 	
 	@GetMapping("/testInsertAll")
 	public String getTestInsertAll() {
-		//MqttStatusConnectionModel.ONLINE_BROKER_INT
-		//MqttStatusConnectionModel.ONLINE_BROKER
+		if(Settings.getInstance().getUsarPostgresql()) {
 		Boolean result1=InserStatusBroker(MqttStatusConnectionModel.ONLINE_BROKER_INT, MqttStatusConnectionModel.ONLINE_BROKER);
 		System.out.println("Result 1 status: "+ result1);
 		Boolean result2 = InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER, MqttStatusConnectionModel.DOWN_BROKER_INT, "caida de test");
@@ -54,6 +57,8 @@ public class MqttStatusConnectionController {
 		Boolean result3 =InsertSerialDesconocido(MqttStatusConnectionModel.SERIAL_UNKNOW, MqttStatusConnectionModel.SERIAL_UNKNOW_INT, "dasdsdsd00001");
 		System.out.println("Result 3 status: "+ result3);
 		return(result1&result2&result3)+"";
+		}
+		return "no esta configurado";
 	}
 	
 	
@@ -84,6 +89,7 @@ public class MqttStatusConnectionController {
 	}
 	
 	public static Boolean InsertAlertaCaida(String razon, Integer code, String description) {
+		if(Settings.getInstance().getUsarPostgresql()) {
 		try { 
             Class.forName("org.postgresql.Driver");
             Connection connection = null;
@@ -105,6 +111,8 @@ public class MqttStatusConnectionController {
             ex.printStackTrace();
             return false;
         }
+		}
+		return false;
 	}
 
 	public static Boolean InsertSerialDesconocido(String serialUnknow, Integer serialUnknowInt, String serial) {

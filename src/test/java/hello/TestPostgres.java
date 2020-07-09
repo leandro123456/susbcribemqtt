@@ -29,7 +29,7 @@ public class TestPostgres {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testConnectionPosgres() {
         try { 
             Class.forName("org.postgresql.Driver");

@@ -30,8 +30,6 @@ public class FirebaseController {
 	
 	public void enviarNotificacion(String username, String body) {
 		try {
-			
-			//String userdeco = new String(Base64.getDecoder().decode(username.getBytes()));
 			System.out.println("****************username que busco notification: "+ username);
 			User user = userdao.retrieveByMail(username);
 			List<String> tokenAborrar= new ArrayList<String>();
@@ -43,18 +41,12 @@ public class FirebaseController {
 				OkHttpClient client = new OkHttpClient();
 				MediaType mediaType = MediaType.parse("application/json");
 				RequestBody body1 = RequestBody.create(mediaType,
-								  ""
-								+ "{\"to\":\"/"	+ token
+								 "{\"to\":\"/"	+ token
 								+ "\",\"notification\": "
 								+ "{\"title\": \""+"cDash Notificacion"+ "\","
 								+ "\"body\":\""+body+ "\","
 								+ "\"click_action\": \""+"https://cdash.space"+"\""
 								+ "}}");
-//						"{\"notification\":{ "
-//						+ "\"title\": \"cDash Notificacion\", "
-//						+ "\"body\": \""+body+"\","
-//						+ "\"to\" : \""+token+"\""
-//								+ "}");
 				System.out.println("este es el mensaje que envio: "+ body1);
 				Request request = new Request.Builder()
 						.url("https://fcm.googleapis.com/fcm/send")

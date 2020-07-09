@@ -50,6 +50,9 @@ public class Device extends MongoDBObject{
 	private String tipodireccion;
 	private String codigouri;
 	private String uridoorman;
+	private List<String> ultimaszonas;
+	private List<String> zonasluegodisparo;
+	private String alarmaTriggerTrouble;
 
 	
 	public Device() {
@@ -59,6 +62,7 @@ public class Device extends MongoDBObject{
 		users = new  ArrayList<>();
 		admins = new ArrayList<>();
 		vista = new HashMap<String,String>();
+		alarmaTriggerTrouble="";
 	}
 
 	public String getUserowner() {
@@ -347,21 +351,40 @@ public class Device extends MongoDBObject{
 		List<Device> devices = devdao.retrieveAllDevices();
 		DeviceConfiguration config = null;
 		for(Device dev: devices) {
-			if(dev.getUsedefaultbrocker()) {
+			if(dev.getUsedefaultbrocker() && dev.getDeviceconfiguration()!=null  && dev.getDeviceconfiguration().size()!=0) {
 				String topico = dev.getDeviceconfiguration().get(0).getTopicescuchar();
 				result.add(topico);		
 			}
 		}
 		return result;
 	}
-	
 
-//	public HashMap<Integer, Integer> getZonas() {
-//		return zonas;
-//	}
-//
-//	public void setZonas(HashMap<Integer, Integer> zonas) {
-//		this.zonas = zonas;
-//	}
-	
+
+	public List<String> getUltimaszonas() {
+		if(this.ultimaszonas==null)
+			ultimaszonas=new ArrayList<>();
+		return ultimaszonas;
+	}
+
+	public void setUltimaszonas(List<String> ultimaszonas) {
+		this.ultimaszonas = ultimaszonas;
+	}
+
+	public List<String> getZonasluegodisparo() {
+		if(this.zonasluegodisparo==null)
+			zonasluegodisparo=new ArrayList<>();
+		return zonasluegodisparo;
+	}
+
+	public void setZonasluegodisparo(List<String> zonasluegodisparo) {
+		this.zonasluegodisparo = zonasluegodisparo;
+	}
+
+	public String getAlarmaTriggerTrouble() {
+		return alarmaTriggerTrouble;
+	}
+
+	public void setAlarmaTriggerTrouble(String alarmaTriggerTrouble) {
+		this.alarmaTriggerTrouble = alarmaTriggerTrouble;
+	}	
 }

@@ -11,6 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import hello.util.Settings;
 import mqttContexto.DevicesCoiaca;
 import mqttContexto.ServicioStatusBroker;
 import postgresConnect.Controller.MqttStatusConnectionController;
@@ -36,17 +37,18 @@ public class MqttConnect implements MqttCallback{
 	}
 	
 	public void iniciar(){
+		System.out.println("INICIO DE CONEXION");
 		String publisherId = UUID.randomUUID().toString();
 		try {
-			MqttClient publisher = new MqttClient("tcp://"+"161.35.254.222"+":"+"1883",publisherId,new MemoryPersistence());
+			MqttClient publisher = new MqttClient(Settings.getInstance().getUriBroker(),publisherId,new MemoryPersistence());
 			publisher.setCallback(this);
 			MqttConnectOptions options = new MqttConnectOptions();
 			options.setAutomaticReconnect(true);
 			options.setWill("backend/status", "offline".getBytes(), 0, true);
 			//options.setCleanSession(false);
 			//options.setConnectionTimeout(35);
-			options.setUserName("cDashSVR");
-			options.setPassword("av1vEDacfGwXc5".toCharArray());
+			options.setUserName(Settings.getInstance().getUserNameBroker());
+			options.setPassword(Settings.getInstance().getPasswordBroker().toCharArray());
 			if ( !publisher.isConnected()) {
 	           	System.out.println("mqttconnect no esta conectado");
 	           	MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER_START, 
@@ -54,6 +56,8 @@ public class MqttConnect implements MqttCallback{
 	           	publisher.connect(options);
 	           	this.client =publisher;
 	           	sendMessage(client, "online");
+	           	if(!publisher.isConnected())
+	           		iniciar();
 	        }else {
 	        	System.out.println("conecto a :" + publisher);
 	        	MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER_START, 
