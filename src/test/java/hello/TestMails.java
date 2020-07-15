@@ -14,7 +14,7 @@ import Persistence.DAO.DeviceDAO;
 import Persistence.Model.Device;
 
 public class TestMails {
-	@Test
+	//@Test
 	public void TestQuitarRegistroMAsViejo() {
 		DeviceDAO devdao= new DeviceDAO();
 		Device device= devdao.retrieveBySerialNumber("DSC010000000002");

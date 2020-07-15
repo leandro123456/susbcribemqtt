@@ -178,20 +178,50 @@ public class DevicesCoiaca {
 		FirebaseController fire = new FirebaseController();
 		MailController mail = new MailController();
 		for(String user: destinatarios) {
-			//Envio de PUSH Firebase
-			boolean enviarNotificacion= enviarNotificacion(user,mensaje);
-			if(enviarNotificacion && mensaje.contains(Notificacion.TRIGERED)) {
-				fire.enviarNotificacion(user, "¡Su alarma se ha Disparado! \n Verifique el Estado");
-			}else if (enviarNotificacion) {
-				fire.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
+			try {
+				User users = userdao.retrieveByMail(user);
+				//System.out.println("user: "+ users.getEmail());
+				System.out.println("armar: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber()));
+				System.out.println("disparar: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber()));
+				System.out.println("armar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO_MAIL+"-"+device.getSerialnumber()));
+				System.out.println("disparar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO_MAIL+"-"+device.getSerialnumber()));
+				
+				
+				if(users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber())!=null &&
+						users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber())) {
+					System.out.println("cambio de Estado armado");
+					fire.enviarNotificacion(user, "Su alarma "+device.getName()+" a cambiado a estado: "+ mensaje);
+				}
+				if(mensaje.contains(Notificacion.TRIGERED) && 
+						users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber())!=null &&
+						users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber())) {
+					System.out.println("cambio de Estado Disparado");
+					fire.enviarNotificacion(user, "¡Su alarma "+device.getName()+" se ha Disparado! \n Verifique el Estado");
+					comenzarGestionDisparado(device);
+				}
+				if(users.getNotificaciones().get(Notificacion.CONDICION_ARMADO_MAIL+"-"+device.getSerialnumber())!=null &&
+						users.getNotificaciones().get(Notificacion.CONDICION_ARMADO_MAIL+"-"+device.getSerialnumber())) {
+					System.out.println("cambio de Estado armado MAIL");
+					mail.enviarNotificacion(user, "Su alarma "+device.getName()+" a cambiado a estado: "+ mensaje);
+				}
+				if(mensaje.contains(Notificacion.TRIGERED) && 
+						users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber())!=null &&
+						users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber())) {
+					System.out.println("cambio de Estado disparado MAIL");
+					mail.enviarNotificacion(user, "¡Su alarma "+device.getName()+" se ha Disparado! \n Verifique el Estado");
+					comenzarGestionDisparado(device);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				
 			}
-			//Envio de MAIL
-			boolean enviarMail = enviarMail(user,mensaje);
-			if(enviarMail && mensaje.contains(Notificacion.TRIGERED)) {
-				mail.enviarNotificacion(user, "¡Su alarma se ha Disparado! \n Verifique el Estado");
-			}else if (enviarMail) {
-				mail.enviarNotificacion(user, "Su alarma a cambiado a estado: "+ mensaje);
-			}
+		}
+		
+	}
+
+	private void comenzarGestionDisparado(Device device) {
+		if(device.getAlarmaTriggerTrouble()==null || !device.getAlarmaTriggerTrouble().equals("")) {
+			device.setAlarmaTriggerTrouble("true;"+hora());
 		}
 		
 	}
@@ -283,7 +313,7 @@ public class DevicesCoiaca {
 
 	private void cargarZonasEnAlarmaDisparada(String alarmaTriggerTrouble, String zona, String mensaje, Device device) {
 		if(alarmaTriggerTrouble!=null && !alarmaTriggerTrouble.equals("")) {
-			String[] vector = alarmaTriggerTrouble.split(Pattern.quote("."));
+			String[] vector = alarmaTriggerTrouble.split(Pattern.quote(";"));
 			Boolean status=Boolean.parseBoolean(vector[0]);
 			if(status) {
 				if(device.getZonasluegodisparo()!=null) {

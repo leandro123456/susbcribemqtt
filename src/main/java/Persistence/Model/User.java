@@ -29,8 +29,41 @@ public class User extends MongoDBObject{
 	private String cookie;
 	private Map<String,Boolean> notificaciones;
 	private List<String> firebasetoken;
+	private String fechaCreacion;
+	private String fechaUltimoIngrego;
+	private Integer ingresosSinLogin;
 	
 	
+	public String getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+
+	public void setFechaCreacion(String fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+
+	public String getFechaUltimoIngrego() {
+		return fechaUltimoIngrego;
+	}
+
+
+	public void setFechaUltimoIngrego(String fechaUltimoIngrego) {
+		this.fechaUltimoIngrego = fechaUltimoIngrego;
+	}
+
+
+	public Integer getIngresosSinLogin() {
+		return ingresosSinLogin;
+	}
+
+
+	public void setIngresosSinLogin(Integer ingresosSinLogin) {
+		this.ingresosSinLogin = ingresosSinLogin;
+	}
+
+
 	public String getEmail() {
 		return email;
 	}

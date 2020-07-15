@@ -70,10 +70,10 @@ public class MailController {
 
 	public static void FinalZonasDeAlarmaNotificar(Device device) {
 		DeviceDAO devdao=new DeviceDAO();
-		String[] vector = device.getAlarmaTriggerTrouble().split(Pattern.quote("."));
+		String[] vector = device.getAlarmaTriggerTrouble().split(Pattern.quote(";"));
 		Boolean status=Boolean.parseBoolean(vector[0]);
-		String tipoError= vector[1];
-		String hora=vector[2];
+		String hora= vector[1];
+		
 		
 		//ENVIAR MAIL
 		for(String usermail: listaDeUsuarios(device)) {		
@@ -103,9 +103,9 @@ public class MailController {
 					"  </style>\n" + 
 					"  </head><BODY><br/> <br/>";
 			String tablaprevia="";
-			for(int i=0; i<device.getUltimaszonas().size(); i++) {
+			for(int i=0; i<device.getZonasluegodisparo().size(); i++) {
 				tablaprevia=tablaprevia+"<tr>";
-				String[] vector1 = device.getUltimaszonas().get(i).split(Pattern.quote("."));
+				String[] vector1 = device.getZonasluegodisparo().get(i).split(Pattern.quote(";"));
 				tablaprevia=tablaprevia+"<td>"+vector1[0]+"</td>";
 				tablaprevia=tablaprevia+"<td>"+vector1[1]+"</td>";
 				tablaprevia=tablaprevia+"<td>"+vector1[2]+"</td>";
@@ -128,6 +128,7 @@ public class MailController {
 
 		//BLANQUEAR LISTA
 		device.setZonasluegodisparo(null);
+		device.setAlarmaTriggerTrouble(null);
 		devdao.update(device);
 	}
 

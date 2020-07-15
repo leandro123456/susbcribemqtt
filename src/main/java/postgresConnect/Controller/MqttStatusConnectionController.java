@@ -116,6 +116,7 @@ public class MqttStatusConnectionController {
 	}
 
 	public static Boolean InsertSerialDesconocido(String serialUnknow, Integer serialUnknowInt, String serial) {
+		if(Settings.getInstance().getUsarPostgresql()) {
 		try { 
             Class.forName("org.postgresql.Driver");
             Connection connection = null;
@@ -136,7 +137,8 @@ public class MqttStatusConnectionController {
             ex.printStackTrace();
             return false;
         }
-		
+		}
+		return false;
 	}
 	
 
