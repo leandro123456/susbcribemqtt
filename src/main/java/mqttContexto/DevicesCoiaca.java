@@ -10,7 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
+
+import com.google.gson.JsonObject;
+import com.mongodb.util.JSON;
 
 import Persistence.DAO.DeviceDAO;
 import Persistence.DAO.UserDAO;
@@ -61,10 +66,44 @@ public class DevicesCoiaca {
 			device.getLastnotification().setTime(new Date().toString());
 			devdao.update(device);
 			System.out.println("Se recibio mensaje Estado del serial: "+ serial+"; actualizado exitosamente");
+			if(topico.contains("/keepAlive"))
+				verficarSignalWifi(device,mensaje);
 		}else {
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeEstadoDevices");
 			MqttStatusConnectionController.InsertSerialDesconocido(MqttStatusConnectionModel.SERIAL_UNKNOW, 
 					MqttStatusConnectionModel.SERIAL_UNKNOW_INT, serial);
+		}
+	}
+
+	private void verficarSignalWifi(Device device, String mensaje) {
+		System.out.println("verificacion de Signal: "+ mensaje);
+		JSONObject json = new JSONObject(mensaje);
+		System.out.println("SALIDA: "+ json.get("dBm"));
+		if(json.get("dBm")!=null && Integer.parseInt(json.get("dBm").toString())<-75) {
+			System.out.println("Es motivo de alarma###################################################################3");
+			List<String> destinatarios = todosLosUsuariosDevice(device);
+			FirebaseController fire = new FirebaseController();
+			MailController mail = new MailController();
+			for(String username: destinatarios) {
+				try {
+					System.out.println("MAIL!!: "+ username);
+					User user = userdao.retrieveByMail(username);
+					System.out.println("0: "+ user.getNotificaciones());
+					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
+//					System.out.println("2: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
+					if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
+							user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
+						fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
+					}
+					if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())!=null &&
+							user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())) {
+						mail.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+			}	
 		}
 	}
 
@@ -171,20 +210,17 @@ public class DevicesCoiaca {
 	}
 
 	private void EnviarNotificacion(Device device, String mensaje) {
-		List<String> destinatarios = new ArrayList<String>();
-		destinatarios.add(new String(Base64.getDecoder().decode(device.getUserowner().getBytes())));
-		destinatarios.addAll(device.getUsers());
-		destinatarios.addAll(device.getAdmins());
+		List<String> destinatarios = todosLosUsuariosDevice(device);
 		FirebaseController fire = new FirebaseController();
 		MailController mail = new MailController();
 		for(String user: destinatarios) {
 			try {
 				User users = userdao.retrieveByMail(user);
-				//System.out.println("user: "+ users.getEmail());
-				System.out.println("armar: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber()));
-				System.out.println("disparar: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber()));
-				System.out.println("armar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO_MAIL+"-"+device.getSerialnumber()));
-				System.out.println("disparar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO_MAIL+"-"+device.getSerialnumber()));
+//				System.out.println("user: "+ users.getEmail());
+//				System.out.println("armar: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber()));
+//				System.out.println("disparar: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO+"-"+device.getSerialnumber()));
+//				System.out.println("armar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_ARMADO_MAIL+"-"+device.getSerialnumber()));
+//				System.out.println("disparar-mail: "+ users.getNotificaciones().get(Notificacion.CONDICION_DISPARADO_MAIL+"-"+device.getSerialnumber()));
 				
 				
 				if(users.getNotificaciones().get(Notificacion.CONDICION_ARMADO+"-"+device.getSerialnumber())!=null &&
@@ -217,6 +253,14 @@ public class DevicesCoiaca {
 			}
 		}
 		
+	}
+
+	private List<String> todosLosUsuariosDevice(Device device) {
+		List<String> destinatarios=new ArrayList<String>();
+		destinatarios.add(new String(Base64.getDecoder().decode(device.getUserowner().getBytes())));
+		destinatarios.addAll(device.getUsers());
+		destinatarios.addAll(device.getAdmins());
+		return destinatarios;
 	}
 
 	private void comenzarGestionDisparado(Device device) {
@@ -311,6 +355,7 @@ public class DevicesCoiaca {
 	}
 	
 
+	
 	private void cargarZonasEnAlarmaDisparada(String alarmaTriggerTrouble, String zona, String mensaje, Device device) {
 		if(alarmaTriggerTrouble!=null && !alarmaTriggerTrouble.equals("")) {
 			String[] vector = alarmaTriggerTrouble.split(Pattern.quote(";"));
