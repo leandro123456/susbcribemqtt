@@ -349,7 +349,7 @@ public class Device extends MongoDBObject{
 		DeviceDAO devdao= new DeviceDAO();
 		List<String> result = new ArrayList<String>();
 		List<Device> devices = devdao.retrieveAllDevices();
-		DeviceConfiguration config = null;
+//		DeviceConfiguration config = null;
 		for(Device dev: devices) {
 			if(dev.getUsedefaultbrocker() && dev.getDeviceconfiguration()!=null  && dev.getDeviceconfiguration().size()!=0) {
 				String topico = dev.getDeviceconfiguration().get(0).getTopicescuchar();

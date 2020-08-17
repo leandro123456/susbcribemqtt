@@ -90,20 +90,44 @@ public class DevicesCoiaca {
 					User user = userdao.retrieveByMail(username);
 					System.out.println("0: "+ user.getNotificaciones());
 					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
-//					System.out.println("2: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
-					if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
-							user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
-						fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
+					if(esNecesarioNotificar(user.getNotificacionSignalWifi(), device)) {
+						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
+								user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
+							fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
+						}
+						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())!=null &&
+								user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())) {
+							mail.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
+						}
 					}
-					if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())!=null &&
-							user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI_MAIL+"-"+device.getSerialnumber())) {
-						mail.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
-					}
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 
 			}	
+		}
+	}
+
+	public boolean esNecesarioNotificar(List<DeviceNotification> notificacionSignalWifi, Device device) {
+		try {
+			for(DeviceNotification notificacion: notificacionSignalWifi) {
+				if(notificacion.getName()!=null && notificacion.getName().equals(device.getSerialnumber())) {
+					Integer cantidadDeEspera= Integer.parseInt(notificacion.getContent());
+					String hora= notificacion.getTime();
+					SimpleDateFormat formatter=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
+					Date fechaDeNotificacion= formatter.parse(hora);
+					Date fechaActual= new Date();
+					System.out.println("horaDeultimaNotificacion calculada: "+ (fechaDeNotificacion.getTime()+(3600000*cantidadDeEspera)));
+					System.out.println("hora actual: "+ fechaActual.getTime());
+					if((fechaDeNotificacion.getTime()+(3600000*cantidadDeEspera))<fechaActual.getTime()) {
+					return true;	
+					}
+					return false;
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 

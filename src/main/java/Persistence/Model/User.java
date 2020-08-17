@@ -32,8 +32,20 @@ public class User extends MongoDBObject{
 	private String fechaCreacion;
 	private String fechaUltimoIngrego;
 	private Integer ingresosSinLogin;
+	private List<DeviceNotification> notificacionSignalWifi;
 	
 	
+	public List<DeviceNotification> getNotificacionSignalWifi() {
+		return notificacionSignalWifi;
+	}
+
+
+	public void setNotificacionSignalWifi(List<DeviceNotification> notificacionSignalWifi) {
+		this.notificacionSignalWifi = notificacionSignalWifi;
+	}
+
+
+
 	public String getFechaCreacion() {
 		return fechaCreacion;
 	}
