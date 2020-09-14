@@ -39,7 +39,7 @@ public class TestMails {
 		devdao.update(device);
 	}
 	
-	//@Test
+	@Test
 	public void TestMailsConTabla() {
 		DeviceDAO devdao= new DeviceDAO();
 		Device device= devdao.retrieveBySerialNumber("DSC010000000002");
@@ -69,7 +69,8 @@ public class TestMails {
 				"  </style>\n" + 
 				"  </head><BODY><br/> <br/>";
 		String tablaprevia="";
-		for(int i=0; i<device.getUltimaszonas().size(); i++) {
+//		for(int i=0; i<device.getUltimaszonas().size(); i++) {
+		for(int i=0; i<10; i++) {
 			tablaprevia=tablaprevia+"<tr>";
 			String[] vector = device.getUltimaszonas().get(i).split(Pattern.quote(";"));
 			tablaprevia=tablaprevia+"<td>"+vector[0]+"</td>";
@@ -78,7 +79,7 @@ public class TestMails {
 			tablaprevia=tablaprevia+"</tr>";
 		}	
 		String body= "<h1>Su alarma paso a Estado"+"Trigger"+" </h1> <br/> "
-				+ "<h3>Se agregan los 10 regostros previos a que se ejecute su Alarma</h3> "
+				+ "<h3>Se agregan los diez registros previos a que se ejecute su Alarma</h3> "
 				+ "<table >\n" + 
 				"  <tr>\n" + 
 				"    <th>Zona</th>\n" + 
