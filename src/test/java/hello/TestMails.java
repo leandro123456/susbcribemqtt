@@ -39,7 +39,7 @@ public class TestMails {
 		devdao.update(device);
 	}
 	
-	@Test
+	//@Test
 	public void TestMailsConTabla() {
 		DeviceDAO devdao= new DeviceDAO();
 		Device device= devdao.retrieveBySerialNumber("DSC010000000002");
