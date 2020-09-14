@@ -90,7 +90,7 @@ public class DevicesCoiaca {
 					User user = userdao.retrieveByMail(username);
 					System.out.println("0: "+ user.getNotificaciones());
 					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
-					if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()) !=null && esNecesarioNotificar(user.getNotificacionSignalWifi(), device)) {
+					if(user.getNotificaciones() !=null && user.getNotificacionSignalWifi()!=null && esNecesarioNotificar(user.getNotificacionSignalWifi(), device)) {
 						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
 								user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
 							fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
@@ -109,7 +109,7 @@ public class DevicesCoiaca {
 
 	public boolean esNecesarioNotificar(List<DeviceNotification> notificacionSignalWifi, Device device) {
 		try {
-			for(DeviceNotification notificacion: notificacionSignalWifi) {
+			for(DeviceNotification notificacion: notificacionSignalWifi) {	
 				if(notificacion.getName()!=null && notificacion.getName().equals(device.getSerialnumber())) {
 					Integer cantidadDeEspera= Integer.parseInt(notificacion.getContent());
 					String hora= notificacion.getTime();
