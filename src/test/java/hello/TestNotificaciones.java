@@ -31,10 +31,11 @@ public class TestNotificaciones {
 		User user= userdao.retrieveByMail("leandrogabrielguzman@gmail.com");
 		user.getNotificacionSignalWifi();
 		DeviceDAO devdao = new DeviceDAO();
-		Device device= devdao.retrieveById("DSC010000000002");
+		Device device= devdao.retrieveBySerialNumber("DSC010000000002");
+		System.out.println("Device: "+ device);
 		DevicesCoiaca dev= new DevicesCoiaca();
 		System.out.println("a: "+ user);
-		Boolean t= dev.esNecesarioNotificar(user.getNotificacionSignalWifi(), device);
+		Boolean t= dev.esNecesarioNotificar(user, device);
 		System.out.println("result: "+ t);		
 	}
 	
