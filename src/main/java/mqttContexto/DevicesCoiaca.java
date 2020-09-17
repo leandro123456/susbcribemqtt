@@ -91,8 +91,10 @@ public class DevicesCoiaca {
 					System.out.println("0: "+ user.getNotificaciones());
 					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
 					Boolean tiempoParaNotificar= esNecesarioNotificar(user, device);
-					System.out.println("Paso el tiempo necesario  para Notificar: "+ tiempoParaNotificar);
+					System.out.println("Paso el tiempo necesario  para Notificar: "+ tiempoParaNotificar +" .mail: " +username + " .serial: "+ device.getSerialnumber());
 					if(user.getNotificaciones() !=null && user.getNotificacionSignalWifi()!=null && tiempoParaNotificar) {
+						actualizarHoradeNotificacionWIFI(user,device);
+						
 						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
 								user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
 							fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");
@@ -107,6 +109,23 @@ public class DevicesCoiaca {
 				} 
 			}	
 		}
+	}
+
+	private void actualizarHoradeNotificacionWIFI(User user, Device device) {
+		try {
+			List<DeviceNotification> notificacionSignalWifi = user.getNotificacionSignalWifi();
+			for(DeviceNotification notificacion: notificacionSignalWifi) {	
+				if(notificacion.getName()!=null && 
+						notificacion.getName().equals(device.getSerialnumber())) {
+					notificacion.setTime(new Date().toString());
+					userdao.update(user);
+					return;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public boolean esNecesarioNotificar(User user, Device device) {
