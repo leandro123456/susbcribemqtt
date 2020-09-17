@@ -90,7 +90,9 @@ public class DevicesCoiaca {
 					User user = userdao.retrieveByMail(username);
 					System.out.println("0: "+ user.getNotificaciones());
 					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
-					if(user.getNotificaciones() !=null && user.getNotificacionSignalWifi()!=null && esNecesarioNotificar(user, device)) {
+					Boolean tiempoParaNotificar= esNecesarioNotificar(user, device);
+					System.out.println("Paso el tiempo necesario  para Notificar: "+ tiempoParaNotificar);
+					if(user.getNotificaciones() !=null && user.getNotificacionSignalWifi()!=null && tiempoParaNotificar) {
 						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&
 								user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())) {
 							fire.enviarNotificacion(username, "Su alarma "+device.getName()+" registra una baja señal  de WIFI: "+ json.get("dBm").toString()+". Por favor verifique su conexión.");

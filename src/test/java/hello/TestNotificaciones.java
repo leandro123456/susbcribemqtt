@@ -25,7 +25,7 @@ public class TestNotificaciones {
 		System.out.println("termino");
 	}
 	
-	//@Test
+	@Test
 	public void testValidarTiempoEntreNotificaciones() {
 		UserDAO userdao= new UserDAO();
 		User user= userdao.retrieveByMail("leandrogabrielguzman@gmail.com");
