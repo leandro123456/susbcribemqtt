@@ -25,8 +25,6 @@ import Persistence.Model.Notificacion;
 import Persistence.Model.User;
 import hello.FirebaseController;
 import hello.MailController;
-import postgresConnect.Controller.MqttStatusConnectionController;
-import postgresConnect.DAO.MqttStatusConnectionModel;
 
 public class DevicesCoiaca {
 	DeviceDAO devdao =new DeviceDAO();
@@ -70,8 +68,6 @@ public class DevicesCoiaca {
 				verficarSignalWifi(device,mensaje);
 		}else {
 			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeEstadoDevices");
-			MqttStatusConnectionController.InsertSerialDesconocido(MqttStatusConnectionModel.SERIAL_UNKNOW, 
-					MqttStatusConnectionModel.SERIAL_UNKNOW_INT, serial);
 		}
 	}
 
@@ -243,9 +239,6 @@ public class DevicesCoiaca {
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; actualizado exitosamente");
 				}else {
 					System.out.println("Se recibio mensaje Particion del serial: "+ serial+"; No se actualizo");
-					//insertar en base de datos
-					MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER, 
-							MqttStatusConnectionModel.DOWN_BROKER_INT, "mqttclient caida sin envio de notificacion");
 					return;
 				}
 			}else{

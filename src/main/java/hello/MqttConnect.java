@@ -14,8 +14,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import hello.util.Settings;
 import mqttContexto.DevicesCoiaca;
 import mqttContexto.ServicioStatusBroker;
-import postgresConnect.Controller.MqttStatusConnectionController;
-import postgresConnect.DAO.MqttStatusConnectionModel;
 
 public class MqttConnect implements MqttCallback{
 	private static MqttConnect mqttconnect= null;
@@ -29,8 +27,6 @@ public class MqttConnect implements MqttCallback{
 	public static MqttConnect getInstance(){
 		if(mqttconnect==null){
 			System.out.println("mqttconnect instancia es null");
-			MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER_START, 
-					MqttStatusConnectionModel.DOWN_BROKER_START_INT, "mqttconnect instancia es null");
 			mqttconnect=new MqttConnect();
 		}
 		return mqttconnect;
@@ -51,8 +47,6 @@ public class MqttConnect implements MqttCallback{
 			options.setPassword(Settings.getInstance().getPasswordBroker().toCharArray());
 			if ( !publisher.isConnected()) {
 	           	System.out.println("mqttconnect no esta conectado");
-	           	MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER_START, 
-						MqttStatusConnectionModel.DOWN_BROKER_START_INT, "mqttconnect no esta conectado");
 	           	publisher.connect(options);
 	           	this.client =publisher;
 	           	sendMessage(client, "online");
@@ -60,8 +54,6 @@ public class MqttConnect implements MqttCallback{
 	           		iniciar();
 	        }else {
 	        	System.out.println("conecto a :" + publisher);
-	        	MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER_START, 
-						MqttStatusConnectionModel.DOWN_BROKER_START_INT, "conecto a :" + publisher);
 	        	this.client =publisher;
 	        }
 		} catch (Exception e) {
@@ -75,8 +67,6 @@ public class MqttConnect implements MqttCallback{
 		System.out.println("ERORR");
 		Date fecha = new Date();
 		System.out.println("ERROR  SE PERDIO LA CONECCION: "+ fecha.toString());
-		MqttStatusConnectionController.InsertAlertaCaida(MqttStatusConnectionModel.DOWN_BROKER, 
-				MqttStatusConnectionModel.DOWN_BROKER_INT, "mqttclient perdio la coneccion");
 		iniciar();
 		
 		
