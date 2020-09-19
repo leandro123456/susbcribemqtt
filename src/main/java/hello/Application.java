@@ -40,11 +40,12 @@ public class Application {
 			int qos = 0;
 			if(client !=null) {
 				System.out.println("esta conectada: "+ client.isConnected());
-				List<String> topicos= Device.obtenerClientesCoiaca();
-				for(String topico : topicos) {
-					client.subscribe(topico, qos);
-				}
-				client.subscribe("RMgmt/#", qos);
+//				List<String> topicos= Device.obtenerClientesCoiaca();
+//				for(String topico : topicos) {
+//					client.subscribe(topico, qos);
+//				}
+//				client.subscribe("RMgmt/#", qos);
+				client.subscribe("#");
 				System.out.println("Me suscribi a todos los topicos en la plataforma");
 				
 			}

@@ -67,7 +67,7 @@ public class DevicesCoiaca {
 			if(topico.contains("/keepAlive"))
 				verficarSignalWifi(device,mensaje);
 		}else {
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeEstadoDevices");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. AnalizarMensajeRemoteManager");
 		}
 	}
 
@@ -167,7 +167,7 @@ public class DevicesCoiaca {
 			devdao.update(device);
 			System.out.println("Se recibio mensaje Estado del serial: "+ serial+"; actualizado exitosamente");
 		}else
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeEstadoDevices");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. AnalizarMensajeEstadoDevices");
 		
 	}
 
@@ -187,7 +187,7 @@ public class DevicesCoiaca {
 				devdao.update(device);
 			}
 		}else
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeZona");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. Analizar particion activa");
 	}
 
 	private void AnalizarMensajeZona(String topico, String mensaje) {
@@ -218,7 +218,7 @@ public class DevicesCoiaca {
 			cargarZonasEnAlarmaDisparada(device.getAlarmaTriggerTrouble(),zona,mensaje,device);
 			
 		}else
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeZona");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. AnalizarMensajeZona");
 	}
 
 	
@@ -251,7 +251,7 @@ public class DevicesCoiaca {
 			}else
 				System.out.println("Este es otro mensaje: "+ mensaje);
 		}else
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeParicion");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. AnalizarMensajeParicion");
 	}
 
 	private void EnviarNotificacion(Device device, String mensaje) {
@@ -359,7 +359,7 @@ public class DevicesCoiaca {
 			devdao.update(device);
 			System.out.println("Se recibio mensaje Status del serial: "+ serial+"; procesado exitosamente");
 		}else
-			System.out.println("ERROR: Serial: " + serial +"; en la plataforma es NULL. AnalizarMensajeStatus");
+			System.out.println("ERROR: Serial: " + serial +"; en la plataforma el device no fue cargado. AnalizarMensajeStatus");
 	}
 
 

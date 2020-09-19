@@ -58,12 +58,12 @@ public class HelloControllerIT {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testSendNotificationTwo() {
 		
 		
 		try {
-			String token= "cCmHZ2HAiJcYytf79hN4cS:APA91bFoZUERcJKb-lW5kj1V8STpYzB3Ucd-FkSPO6kVLL3Qqryq1VwDGAP1RFA36eYwzxbCTFYd0g_tjjQPUZvspY08gsyqX9FXd9aeTuBKhvGR2Er8pvMrEoEMh-QJIITBimuSNbjh";
+			String token= "caRfPUL-HakRXf3Kvk097D:APA91bEIE52nR9_-HktR58gtPMS3Q__u-_pQeTXBb2aCOGNVxrgr6uxiRqhnFZtqyGNoDYqizBzGfc9mmsRcDG_bkuaNIn7RDBcZRA8LGa3uzoDU9WikaHiAj90YJtFhlj8OyBG8nNPw";
 			URI uri= new URI("https://www.facebook.com");
 			OkHttpClient client = new OkHttpClient();
 			MediaType mediaType = MediaType.parse("application/json");
