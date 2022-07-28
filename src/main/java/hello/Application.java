@@ -24,8 +24,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
     
-    @Bean
-	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> setPort() {
+	@Bean
+	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> setConfiguration() {
 		return factory -> {
 			factory.setPort(8090);
 		};

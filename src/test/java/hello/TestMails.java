@@ -8,12 +8,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.junit.Test;
 
 import Persistence.DAO.DeviceDAO;
+import Persistence.DAO.UserDAO;
 import Persistence.Model.Device;
+import Persistence.Model.User;
 
 public class TestMails {
+	
+	//@Test
+	public void testSearchUserbyDeviceSerial() {
+		String serial="DSC010000000002";
+		String username="leandrogabrielguzman@gmail.com";
+		UserDAO userdao=new UserDAO();
+		User user= userdao.retrieveByMail(username);
+		String codDesarmado= user.getDeviceserialnumber().get(serial);
+		System.out.println(codDesarmado);
+	}
+	
+	
+	
 	//@Test
 	public void TestQuitarRegistroMAsViejo() {
 		DeviceDAO devdao= new DeviceDAO();
@@ -39,10 +55,10 @@ public class TestMails {
 		devdao.update(device);
 	}
 	
-	//@Test
+	@Test
 	public void TestMailsConTabla() {
-		DeviceDAO devdao= new DeviceDAO();
-		Device device= devdao.retrieveBySerialNumber("DSC010000000002");
+		//DeviceDAO devdao= new DeviceDAO();
+		//Device device= devdao.retrieveBySerialNumber("DSC010000000002");
 		String cabecera = "<HTML><head>\n" + 
 				"  <style>\n" + 
 				"  table {\n" + 
@@ -72,10 +88,10 @@ public class TestMails {
 //		for(int i=0; i<device.getUltimaszonas().size(); i++) {
 		for(int i=0; i<10; i++) {
 			tablaprevia=tablaprevia+"<tr>";
-			String[] vector = device.getUltimaszonas().get(i).split(Pattern.quote(";"));
-			tablaprevia=tablaprevia+"<td>"+vector[0]+"</td>";
-			tablaprevia=tablaprevia+"<td>"+vector[1]+"</td>";
-			tablaprevia=tablaprevia+"<td>"+vector[2]+"</td>";
+//			String[] vector = device.getUltimaszonas().get(i).split(Pattern.quote(";"));
+//			tablaprevia=tablaprevia+"<td>"+vector[0]+"</td>";
+//			tablaprevia=tablaprevia+"<td>"+vector[1]+"</td>";
+//			tablaprevia=tablaprevia+"<td>"+vector[2]+"</td>";
 			tablaprevia=tablaprevia+"</tr>";
 		}	
 		String body= "<h1>Su alarma paso a Estado"+"Trigger"+" </h1> <br/> "

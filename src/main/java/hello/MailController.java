@@ -43,7 +43,7 @@ public class MailController {
 		Session session = Session.getInstance(props,
 				new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("iot@qliq.com.ar", "nMvJRVdqb0DXlgpPVJnr");
+				return new PasswordAuthentication("dispatcher@qliq.com.ar", "laazulClientes");
 			}
 		});
 		MimeMessage message = new MimeMessage(session);
@@ -54,7 +54,7 @@ public class MailController {
 			message.setSubject("[cDash]: Notificacion");
 			message.setText(Mensaje,"ISO-8859-1","html");
 			Transport transport = session.getTransport("smtp");
-			transport.connect("smtp.gmail.com","iot@cdash.space", "nMvJRVdqb0DXlgpPVJnr");
+			transport.connect("smtp.gmail.com","dispatcher@qliq.com.ar", "laazulClientes");
 	        transport.sendMessage(message, message.getAllRecipients());
 	        transport.close();
 			System.out.println("Su mensaje se envio correctamente");

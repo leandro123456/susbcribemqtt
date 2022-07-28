@@ -53,6 +53,7 @@ public class Device extends MongoDBObject{
 	private List<String> ultimaszonas;
 	private List<String> zonasluegodisparo;
 	private String alarmaTriggerTrouble;
+	private String coddesarmado;
 
 	
 	public Device() {
@@ -63,6 +64,15 @@ public class Device extends MongoDBObject{
 		admins = new ArrayList<>();
 		vista = new HashMap<String,String>();
 		alarmaTriggerTrouble="";
+	}
+
+	
+	public String getCoddesarmado() {
+		return coddesarmado;
+	}
+
+	public void setCoddesarmado(String coddesarmado) {
+		this.coddesarmado = coddesarmado;
 	}
 
 	public String getUserowner() {

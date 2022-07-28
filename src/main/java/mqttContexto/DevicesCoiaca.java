@@ -85,10 +85,10 @@ public class DevicesCoiaca {
 					System.out.println("MAIL!!: "+ username);
 					User user = userdao.retrieveByMail(username);
 					System.out.println("0: "+ user.getNotificaciones());
-					System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
 					Boolean tiempoParaNotificar= esNecesarioNotificar(user, device);
 					System.out.println("Paso el tiempo necesario  para Notificar: "+ tiempoParaNotificar +" .mail: " +username + " .serial: "+ device.getSerialnumber());
 					if(user.getNotificaciones() !=null && user.getNotificacionSignalWifi()!=null && tiempoParaNotificar) {
+						System.out.println("1: "+user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber()));
 						actualizarHoradeNotificacionWIFI(user,device);
 						
 						if(user.getNotificaciones().get(Notificacion.CONDICION_BAJASIGNALWIFI+"-"+device.getSerialnumber())!=null &&

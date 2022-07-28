@@ -2,6 +2,7 @@ package Persistence.DAO;
 
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class UserDAO extends MongoDBClient<User>{
 		return this.retrieveByFilter(filter);
 	}
 	
+
     public void deleteUser(User user) {
 		this.delete(user);
 	}

@@ -25,7 +25,7 @@ public class User extends MongoDBObject{
 	private String passCuenta;
 	private Boolean cuenta_iniciada;
 	private String role;
-	private List<String> deviceserialnumber;
+	private Map<String,String> deviceserialnumber;
 	private String cookie;
 	private Map<String,Boolean> notificaciones;
 	private List<String> firebasetoken;
@@ -167,14 +167,14 @@ public class User extends MongoDBObject{
 	}
 
 
-	public List<String> getDeviceserialnumber() {
+	public Map<String, String> getDeviceserialnumber() {
 		if(deviceserialnumber == null)
-			deviceserialnumber = new ArrayList<>();
+			deviceserialnumber = new HashMap<String, String>();
 		return deviceserialnumber;
 	}
 
 
-	public void setDeviceserialnumber(List<String> deviceserialnumber) {
+	public void setDeviceserialnumber(Map<String, String>  deviceserialnumber) {
 		this.deviceserialnumber = deviceserialnumber;
 	}
 

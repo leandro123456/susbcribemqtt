@@ -61,7 +61,7 @@ public class EnviodeMensajes implements Callable<Void>{
 	        msg.setRetained(true);
 	        publisher.publish(topic,msg); 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
